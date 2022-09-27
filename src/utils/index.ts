@@ -1,1 +1,2 @@
-export { validateEmail } from "./validateEmail";
+export * from "./validateEmail";
+export * from "./asserts";
