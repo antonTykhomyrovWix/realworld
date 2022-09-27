@@ -1,7 +1,5 @@
-import { API_URL } from "./constants";
+import { API_URL, headers } from "./constants";
 import { User } from "../types";
-
-const headers = new Headers({ "content-type": "application/json" });
 
 //TODO: add try/catch
 class UserService {
