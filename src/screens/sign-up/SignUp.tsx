@@ -1,11 +1,24 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Text, View, Button } from "react-native";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-export function SignUp({ navigation }) {
+import { RootStackParamList, screenName } from "../../navigation";
+
+type SignUpProps = NativeStackScreenProps<
+  RootStackParamList,
+  screenName.signUp
+>;
+
+export function SignUp({ navigation }: SignUpProps) {
+  const signUp = useCallback(() => {
+    console.log("Sign Up");
+    navigation.navigate(screenName.home);
+  }, [navigation]);
+
   return (
     <View>
       <Text>Sign Up!</Text>
-      <Button title="Sign Up" onPress={() => navigation.navigate("Article")} />
+      <Button title="Sign Up" onPress={signUp} />
     </View>
   );
 }

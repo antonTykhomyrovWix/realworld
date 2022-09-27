@@ -6,33 +6,44 @@ import { User } from "../types";
 class UserService {
   async getCurrent(): Promise<User | undefined> {
     const response = await fetch(`${API_URL}/user`);
-    const { user, status } = await response.json();
 
-    if (status === "Error") {
-      return undefined;
+    console.log("!!!response getCurrent", response);
+
+    if (isOk(response)) {
+      const { user, status } = await response.json();
+
+      if (status === "Error") {
+        return undefined;
+      }
+
+      // assert typeguard
+      return user;
     }
 
-    // assert typeguard
-    return user;
+    return undefined;
   }
 
   async login(email: string, password: string): Promise<User | string> {
+    const user = {
+      email,
+      password,
+    };
     const response = await fetch(`${API_URL}/users/login`, {
       method: "POST",
-      body: JSON.stringify({
-        email,
-        password,
-      }),
+      body: JSON.stringify({ user }),
     });
 
-    const { user, errors } = await response.json();
+    if (isOk(response)) {
+      const data = await response.json();
 
-    if (errors) {
-      return errors.toString();
+      if (data.errors) {
+        return data.errors.toString();
+      }
+
+      return data.user;
     }
 
-    // assert typeguard
-    return user;
+    return "Something went wrong";
   }
 
   async register(
@@ -49,15 +60,23 @@ class UserService {
       }),
     });
 
-    const { user, errors } = await response.json();
+    if (isOk(response)) {
+      const { user, errors } = await response.json();
 
-    if (errors) {
-      return errors.toString();
+      if (errors) {
+        return errors.toString();
+      }
+
+      // assert typeguard
+      return user;
     }
 
-    // assert typeguard
-    return user;
+    return "Something went wrong";
   }
 }
 
 export const userService = new UserService();
+
+function isOk(response: Response): boolean {
+  return response.status === 200 && response.ok;
+}

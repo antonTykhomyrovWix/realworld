@@ -8,18 +8,52 @@ import { SignIn } from "../screens/sign-in";
 import { SignUp } from "../screens/sign-up";
 import { Profile } from "../screens/profile";
 import { screenOptions } from "./screen-options";
+import { screenName, screenTitle, RootStackParamList } from "./types";
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export function Navigation() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home" screenOptions={screenOptions}>
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="Article" component={Article} />
-        <Stack.Screen name="SignIn" component={SignIn} />
-        <Stack.Screen name="SignUp" component={SignUp} />
-        <Stack.Screen name="Profile" component={Profile} />
+      <Stack.Navigator
+        initialRouteName={screenName.home}
+        screenOptions={screenOptions}
+      >
+        <Stack.Screen
+          name={screenName.home}
+          component={Home}
+          options={{
+            title: screenTitle[screenName.home],
+          }}
+        />
+        <Stack.Screen
+          name={screenName.article}
+          component={Article}
+          options={{
+            title: screenTitle[screenName.article],
+          }}
+        />
+        <Stack.Screen
+          name={screenName.signIn}
+          component={SignIn}
+          options={{
+            title: screenTitle[screenName.signIn],
+          }}
+        />
+        <Stack.Screen
+          name={screenName.signUp}
+          component={SignUp}
+          options={{
+            title: screenTitle[screenName.signUp],
+          }}
+        />
+        <Stack.Screen
+          name={screenName.profile}
+          component={Profile}
+          options={{
+            title: screenTitle[screenName.profile],
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
