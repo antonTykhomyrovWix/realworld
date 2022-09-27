@@ -1,49 +1,41 @@
 import { API_URL } from "./constants";
 import { User } from "../types";
 
-//TODO: add try/catch
+const headers = new Headers({ "content-type": "application/json" });
 
+//TODO: add try/catch
 class UserService {
   async getCurrent(): Promise<User | undefined> {
     const response = await fetch(`${API_URL}/user`);
+    const { user, status } = await response.json();
 
-    console.log("!!!response getCurrent", response);
-
-    if (isOk(response)) {
-      const { user, status } = await response.json();
-
-      if (status === "Error") {
-        return undefined;
-      }
-
-      // assert typeguard
-      return user;
+    if (status === "Error") {
+      return undefined;
     }
 
-    return undefined;
+    // assert typeguard
+    return user;
   }
 
   async login(email: string, password: string): Promise<User | string> {
-    const user = {
-      email,
-      password,
-    };
     const response = await fetch(`${API_URL}/users/login`, {
+      headers,
       method: "POST",
-      body: JSON.stringify({ user }),
+      body: JSON.stringify({
+        user: {
+          email,
+          password,
+        },
+      }),
     });
+    const { errors, user } = await response.json();
 
-    if (isOk(response)) {
-      const data = await response.json();
-
-      if (data.errors) {
-        return data.errors.toString();
-      }
-
-      return data.user;
+    if (errors) {
+      return Object.entries(errors).join(": ");
     }
 
-    return "Something went wrong";
+    // assert typeguard
+    return user;
   }
 
   async register(
@@ -52,31 +44,25 @@ class UserService {
     password: string
   ): Promise<User | string> {
     const response = await fetch(`${API_URL}/users`, {
+      headers,
       method: "POST",
       body: JSON.stringify({
-        username,
-        email,
-        password,
+        user: {
+          username,
+          email,
+          password,
+        },
       }),
     });
+    const { errors, user } = await response.json();
 
-    if (isOk(response)) {
-      const { user, errors } = await response.json();
-
-      if (errors) {
-        return errors.toString();
-      }
-
-      // assert typeguard
-      return user;
+    if (errors) {
+      return Object.entries(errors).join(";\n");
     }
 
-    return "Something went wrong";
+    // assert typeguard
+    return user;
   }
 }
 
 export const userService = new UserService();
-
-function isOk(response: Response): boolean {
-  return response.status === 200 && response.ok;
-}

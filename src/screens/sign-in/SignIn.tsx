@@ -1,11 +1,12 @@
 import React, { useCallback, useState } from "react";
-import { Text, View, Button, TextInput, StyleSheet } from "react-native";
+import { Text, View, Button, TextInput } from "react-native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { RootStackParamList, screenName } from "../../navigation";
 import { validateEmail } from "../../utils";
 import { userService } from "../../services";
 import { userStore } from "../../stores";
+import { commonStyles } from "../../style-sheets";
 
 type SignInProps = NativeStackScreenProps<
   RootStackParamList,
@@ -64,17 +65,17 @@ export function SignIn({ navigation }: SignInProps) {
   }, [validateForm, email, password, navigation]);
 
   return (
-    <View style={styles.view}>
-      {error && <Text style={styles.error}>{error}</Text>}
+    <View style={commonStyles.flexCenter}>
+      {error && <Text style={commonStyles.error}>{error}</Text>}
       <TextInput
-        style={styles.input}
+        style={commonStyles.input}
         placeholder="Email"
         onChangeText={setEmail}
         value={email}
         keyboardType="email-address"
       />
       <TextInput
-        style={styles.input}
+        style={commonStyles.input}
         placeholder="Password"
         onChangeText={setPassword}
         value={password}
@@ -86,33 +87,9 @@ export function SignIn({ navigation }: SignInProps) {
         title="Sign In"
         onPress={signIn}
       />
-      <Text style={styles.signUpText} onPress={goToSignUp}>
+      <Text style={commonStyles.authenticationText} onPress={goToSignUp}>
         Need an account?
       </Text>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  view: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  error: {
-    color: "#B85C5C",
-  },
-  input: {
-    height: 40,
-    width: "80%",
-    borderWidth: 1,
-    borderColor: "#55595c",
-    borderRadius: 3,
-    padding: 5,
-    marginBottom: 10,
-  },
-  signUpText: {
-    color: "#5CB85C",
-    marginTop: 20,
-  },
-});
