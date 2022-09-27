@@ -4,7 +4,7 @@ import { useConnect } from "remx";
 
 import { TagItem } from "./TagItem";
 import { tagsStore } from "../../stores";
-import { tagsService } from "../../services/tags";
+import { tagsService } from "../../services";
 
 export function TagsList() {
   const isLoading = useConnect(tagsStore.getLoading);

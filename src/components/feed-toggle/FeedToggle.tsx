@@ -86,6 +86,7 @@ export function FeedToggle() {
 
 const styles = StyleSheet.create({
   container: {
+    flexGrow: 0,
     borderBottomWidth: 1,
     borderColor: "#aaa",
   },

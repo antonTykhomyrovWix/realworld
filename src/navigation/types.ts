@@ -7,7 +7,7 @@ export const enum screenName {
 }
 
 export type RootStackParamList = {
-  [screenName.article]: { articleId: string };
+  [screenName.article]: { articleSlug: string };
   [screenName.home]: undefined;
   [screenName.signIn]: undefined;
   [screenName.profile]: { username: string };
