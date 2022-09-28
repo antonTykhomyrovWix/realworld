@@ -1,4 +1,4 @@
-import { Tag } from "../types/tags";
+import { Tag } from "../types";
 import { API_URL } from "./constants";
 import { getHeaders } from "./headers";
 

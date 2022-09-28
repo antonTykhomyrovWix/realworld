@@ -9,7 +9,7 @@ import {
 import { useConnect } from "remx";
 
 import { feedStore, FeedType, tagsStore } from "../../stores";
-import { Article } from "../../types/articles";
+import { Article } from "../../types";
 import { articlesService } from "../../services";
 import { ArticleItem } from "./ArticleItem";
 import { commonStyles } from "../../style-sheets";

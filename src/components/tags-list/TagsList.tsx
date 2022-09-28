@@ -2,7 +2,7 @@ import React from "react";
 import { FlatList, View } from "react-native";
 
 import { TagItem } from "./TagItem";
-import { Tag } from "../../types/tags";
+import { Tag } from "../../types";
 
 type TagsListProps = Readonly<{
   tags: ReadonlyArray<Tag>;

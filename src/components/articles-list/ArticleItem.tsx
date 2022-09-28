@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-import { Article } from "../../types/articles";
+import { Article } from "../../types";
 import { ArticleMetaInfo } from "../article-meta-info";
 import { ArticleFooter } from "./ArticleFooter";
 

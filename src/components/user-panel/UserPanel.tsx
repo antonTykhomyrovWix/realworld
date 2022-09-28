@@ -1,13 +1,16 @@
 import React, { useCallback } from "react";
 import { Text, View } from "react-native";
-import { NativeStackHeaderProps } from "@react-navigation/native-stack/src/types";
+import { ParamListBase } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack/src/types";
 import { useConnect } from "remx";
 
 import { screenName } from "../../navigation";
 import { User } from "../../types";
 import { userStore } from "../../stores";
 
-type UserPanelProps = NativeStackHeaderProps;
+type UserPanelProps = Readonly<{
+  navigation: NativeStackNavigationProp<ParamListBase>;
+}>;
 
 export function UserPanel({ navigation }: UserPanelProps) {
   // TODO:useConnect type error

@@ -1,6 +1,6 @@
 import { state, setters, getters } from "remx";
 
-import { Tag } from "../types/tags";
+import { Tag } from "../types";
 
 type TagsState = {
   loading: boolean;

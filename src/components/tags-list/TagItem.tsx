@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-import { Tag } from "../../types/tags";
+import { Tag } from "../../types";
 
 type TagItemProps = Readonly<{
   tag: Tag;

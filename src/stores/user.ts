@@ -1,4 +1,5 @@
 import { state, setters, getters } from "remx";
+
 import { User } from "../types";
 
 type UserState = {

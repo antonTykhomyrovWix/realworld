@@ -1,13 +1,20 @@
-import React, { useEffect, useState } from "react";
-import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+} from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { RootStackParamList, screenName } from "../../navigation";
 import { commonStyles } from "../../style-sheets";
-import { articlesService } from "../../services";
-import { Article as ArticleType } from "../../types/articles";
+import { articlesService, commentsService } from "../../services";
+import { Article as ArticleType, Comment } from "../../types";
 import { ArticleMetaInfo } from "../../components/article-meta-info";
 import { TagsList } from "../../components/tags-list";
+import { Comments } from "../../components/comments";
 
 type ArticleProps = NativeStackScreenProps<
   RootStackParamList,
@@ -15,24 +22,47 @@ type ArticleProps = NativeStackScreenProps<
 >;
 
 export function Article({ route }: ArticleProps) {
-  const [article, setArticle] = useState<ArticleType | undefined>();
   const [loading, setLoading] = useState<boolean>(true);
+  const [article, setArticle] = useState<ArticleType | undefined>();
+  const [comments, setComments] = useState<
+    ReadonlyArray<Comment> | undefined
+  >();
 
   useEffect(() => {
-    const fetchArticle = async () => {
+    const fetchArticleData = async () => {
       setLoading(true);
-      const fetchedArticle = await articlesService.getArticle(
-        route.params.articleSlug
-      );
+
+      const articleSlug = route.params.articleSlug;
+      const [fetchedArticle, fetchedComments] = await Promise.all([
+        articlesService.getArticle(articleSlug),
+        commentsService.getComments(articleSlug),
+      ]);
 
       setArticle(fetchedArticle);
+      setComments(fetchedComments);
       setLoading(false);
     };
 
-    fetchArticle();
+    fetchArticleData();
   }, [route.params.articleSlug]);
 
-  if (loading || !article) {
+  const postComment = useCallback(
+    async (comment: string) => {
+      const newComment = await commentsService.postComment(
+        route.params.articleSlug,
+        comment
+      );
+
+      if (!newComment) {
+        return;
+      }
+
+      setComments([newComment, ...(comments ?? [])]);
+    },
+    [route.params.articleSlug, comments]
+  );
+
+  if (loading || !article || !comments) {
     return (
       <View style={commonStyles.flexCenter}>
         <ActivityIndicator />
@@ -41,26 +71,32 @@ export function Article({ route }: ArticleProps) {
   }
 
   return (
-    <View>
-      <View style={styles.headerContainer}>
+    <ScrollView>
+      <View style={[styles.paddingBlock, styles.headerContainer]}>
         <Text style={styles.title}>{article.title}</Text>
         <ArticleMetaInfo article={article} />
       </View>
-      <View style={styles.bodyContainer}>
+      <View style={styles.paddingBlock}>
         <Text>{article.body}</Text>
       </View>
-      <View style={styles.tagsContainer}>
+      <View style={[styles.paddingBlock, styles.tagsContainer]}>
         <TagsList tags={article.tagList} />
       </View>
-    </View>
+
+      <View style={styles.paddingBlock}>
+        <Comments comments={comments} postComment={postComment} />
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  headerContainer: {
-    backgroundColor: "#333",
+  paddingBlock: {
     paddingVertical: 12,
     paddingHorizontal: 8,
+  },
+  headerContainer: {
+    backgroundColor: "#333",
   },
   title: {
     marginBottom: 12,
@@ -68,13 +104,9 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: "700",
   },
-  bodyContainer: {
-    paddingVertical: 12,
-    paddingHorizontal: 8,
-  },
   tagsContainer: {
-    paddingVertical: 12,
     borderBottomWidth: 1,
+    paddingHorizontal: 0,
     borderBottomColor: "#aaa",
   },
 });

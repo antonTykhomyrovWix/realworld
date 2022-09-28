@@ -1,4 +1,4 @@
-import { Article } from "../types/articles";
+import { Article } from "../types";
 import { API_URL } from "./constants";
 import { getHeaders } from "./headers";
 

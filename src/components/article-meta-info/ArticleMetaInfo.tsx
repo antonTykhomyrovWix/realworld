@@ -7,7 +7,7 @@ import {
   TouchableHighlight,
 } from "react-native";
 
-import { Article } from "../../types/articles";
+import { Article } from "../../types";
 
 type ArticleHeaderProps = Readonly<{
   article: Article;

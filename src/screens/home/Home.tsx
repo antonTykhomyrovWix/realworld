@@ -1,15 +1,15 @@
 import React, { useCallback, useEffect } from "react";
 import { StyleSheet, View, ActivityIndicator } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { useConnect } from "remx";
 
 import { RootStackParamList, screenName } from "../../navigation";
 import { TagsList } from "../../components/tags-list";
 import { FeedToggle } from "../../components/feed-toggle";
 import { ArticlesList } from "../../components/articles-list";
-import { useConnect } from "remx";
 import { tagsStore } from "../../stores";
 import { tagsService } from "../../services";
-import { Tag } from "../../types/tags";
+import { Tag } from "../../types";
 
 type HomeProps = NativeStackScreenProps<RootStackParamList, screenName.home>;
 

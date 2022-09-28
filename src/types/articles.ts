@@ -1,9 +1,4 @@
-type Author = Readonly<{
-  username: string;
-  bio: string;
-  image: string;
-  following: boolean;
-}>;
+import { Author } from "./author";
 
 export type Article = Readonly<{
   slug: string;
