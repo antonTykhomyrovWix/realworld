@@ -8,10 +8,9 @@ import {
 } from "react-native";
 import { useConnect } from "remx";
 
-import { feedStore, FeedType, tagsStore, userStore } from "../../stores";
+import { feedStore, FeedType, tagsStore } from "../../stores";
 import { Article } from "../../types/articles";
 import { articlesService } from "../../services";
-import { User } from "../../types";
 import { ArticleItem } from "./ArticleItem";
 import { commonStyles } from "../../style-sheets";
 
@@ -29,27 +28,20 @@ export function ArticlesList({ goToArticle }: ArticlesListProps) {
   );
   // @ts-ignore
   const activeTag = useConnect<string | undefined, []>(tagsStore.getActiveTag);
-  // @ts-ignore
-  const currentUser = useConnect<User | undefined, []>(
-    userStore.getCurrentUser
-  );
 
   useEffect(() => {
     const fetchArticles = async () => {
       setLoading(true);
-      console.log("!!! fetchArticles", activeFeed, activeTag);
       const newArticles =
         activeFeed === FeedType.Your
-          ? await articlesService.getUserFeedArticles(currentUser?.token)
-          : await articlesService.getArticles(currentUser?.token, activeTag);
+          ? await articlesService.getUserFeedArticles()
+          : await articlesService.getArticles(activeTag);
 
-      console.log("!!! newArticles", newArticles);
       setArticles(newArticles);
       setLoading(false);
     };
 
     fetchArticles();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeFeed, activeTag]);
 
   if (loading) {

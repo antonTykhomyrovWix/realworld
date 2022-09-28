@@ -1,10 +1,13 @@
-import { API_URL, headers } from "./constants";
 import { User } from "../types";
+import { API_URL } from "./constants";
+import { getHeaders } from "./headers";
 
 //TODO: add try/catch
 class UserService {
   async getCurrent(): Promise<User | undefined> {
-    const response = await fetch(`${API_URL}/user`);
+    const response = await fetch(`${API_URL}/user`, {
+      headers: getHeaders(),
+    });
     const { user, status } = await response.json();
 
     if (status === "Error") {
@@ -17,7 +20,7 @@ class UserService {
 
   async login(email: string, password: string): Promise<User | string> {
     const response = await fetch(`${API_URL}/users/login`, {
-      headers,
+      headers: getHeaders(),
       method: "POST",
       body: JSON.stringify({
         user: {
@@ -42,7 +45,7 @@ class UserService {
     password: string
   ): Promise<User | string> {
     const response = await fetch(`${API_URL}/users`, {
-      headers,
+      headers: getHeaders(),
       method: "POST",
       body: JSON.stringify({
         user: {

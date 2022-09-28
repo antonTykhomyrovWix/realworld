@@ -15,8 +15,10 @@ export function ArticleFooter({ article }: ArticleFooterProps) {
       <Text style={styles.readMore}>Read more...</Text>
 
       <View style={styles.tagList}>
-        {tagList.map((tag: string) => (
-          <Text style={styles.tag}>{tag}</Text>
+        {tagList.map((tag: string, index: number) => (
+          <Text key={index} style={styles.tag}>
+            {tag}
+          </Text>
         ))}
       </View>
     </View>
