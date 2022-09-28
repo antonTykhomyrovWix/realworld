@@ -12,8 +12,8 @@ import { useConnect } from "remx";
 import { commonStyles } from "../../style-sheets";
 import { RootStackParamList, screenName } from "../../navigation";
 import { articlesService, commentsService } from "../../services";
-import { Article as ArticleType, Comment } from "../../types";
-import { articlesStore } from "../../stores";
+import { Article as ArticleType, Comment, User } from "../../types";
+import { articlesStore, userStore } from "../../stores";
 import { ArticleMetaInfo } from "../../components/article-meta-info";
 import { TagsList } from "../../components/tags-list";
 import { Comments } from "../../components/comments";
@@ -32,6 +32,10 @@ export function Article({ route, navigation }: ArticleProps) {
   // @ts-ignore
   const article = useConnect<ArticleType | undefined, []>(
     articlesStore.getOpenArticle
+  );
+  // @ts-ignore
+  const currentUser = useConnect<User | undefined, []>(
+    userStore.getCurrentUser
   );
 
   const goToSignIn = useCallback(
@@ -55,7 +59,7 @@ export function Article({ route, navigation }: ArticleProps) {
     };
 
     fetchArticleData();
-  }, [route.params.articleSlug]);
+  }, [route.params.articleSlug, currentUser]);
 
   const postComment = useCallback(
     async (comment: string) => {

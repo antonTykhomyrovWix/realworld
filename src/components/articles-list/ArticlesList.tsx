@@ -8,10 +8,10 @@ import {
 } from "react-native";
 import { useConnect } from "remx";
 
-import { feedsStore, tagsStore, articlesStore } from "../../stores";
+import { feedsStore, tagsStore, articlesStore, userStore } from "../../stores";
 import { articlesService } from "../../services";
 import { commonStyles } from "../../style-sheets";
-import { Feed, FeedType } from "../../types";
+import { Feed, FeedType, User } from "../../types";
 import { ArticleItem } from "./ArticleItem";
 
 type ArticlesListProps = Readonly<{
@@ -24,6 +24,10 @@ export function ArticlesList({ goToArticle, goToSignIn }: ArticlesListProps) {
   // TODO:useConnect type error
   // @ts-ignore
   const activeFeed = useConnect<Feed | undefined, []>(feedsStore.getActiveFeed);
+  // @ts-ignore
+  const currentUser = useConnect<User | undefined, []>(
+    userStore.getCurrentUser
+  );
   const articles = useConnect(articlesStore.getArticles);
 
   useEffect(() => {
@@ -43,7 +47,7 @@ export function ArticlesList({ goToArticle, goToSignIn }: ArticlesListProps) {
     };
 
     fetchArticles();
-  }, [activeFeed]);
+  }, [activeFeed, currentUser]);
 
   if (loading) {
     return (
