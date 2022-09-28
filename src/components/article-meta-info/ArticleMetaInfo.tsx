@@ -1,21 +1,44 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import {
   StyleSheet,
   Text,
   View,
   Image,
   TouchableHighlight,
+  ActivityIndicator,
 } from "react-native";
 
-import { Article } from "../../types";
+import { Article, User } from "../../types";
+import { favoriteService } from "../../services";
+import { articlesStore, userStore } from "../../stores";
+import { useConnect } from "remx";
 
 type ArticleHeaderProps = Readonly<{
   article: Article;
 }>;
 
 export function ArticleMetaInfo({ article }: ArticleHeaderProps) {
-  const { createdAt, author, favoritesCount, favorited } = article;
+  const { slug, createdAt, author, favoritesCount, favorited } = article;
   const date = new Date(createdAt);
+  const [favoriteLoading, setFavoriteLoading] = useState<boolean>(false);
+  // TODO:useConnect type error
+  // @ts-ignore
+  const currentUser = useConnect<User | undefined, []>(
+    userStore.getCurrentUser
+  );
+
+  const onFavoriteClick = useCallback(async () => {
+    setFavoriteLoading(true);
+    const updatedArticle = favorited
+      ? await favoriteService.unfavorite(slug)
+      : await favoriteService.favorite(slug);
+
+    if (updatedArticle) {
+      articlesStore.updateArticle(updatedArticle);
+    }
+
+    setFavoriteLoading(false);
+  }, [slug, favorited]);
 
   return (
     <View>
@@ -23,17 +46,21 @@ export function ArticleMetaInfo({ article }: ArticleHeaderProps) {
       <Text style={styles.username}>{author.username}</Text>
       <Text style={styles.date}>{date.toLocaleDateString()}</Text>
       <TouchableHighlight
-        style={[styles.favorite, favorited && styles.favoriteDisabled]}
+        style={[styles.favorite, favorited && styles.favoriteActive]}
         underlayColor="#A5D9A5"
-        onPress={() => console.log("Like")}
-        disabled={favorited}
+        onPress={onFavoriteClick}
+        disabled={favoriteLoading || !currentUser}
       >
-        <Text
-          style={[
-            styles.favoriteView,
-            favorited && styles.favoriteViewDisabled,
-          ]}
-        >{`\u2665 ${favoritesCount}`}</Text>
+        {favoriteLoading ? (
+          <ActivityIndicator />
+        ) : (
+          <Text
+            style={[
+              styles.favoriteView,
+              favorited && styles.favoriteViewActive,
+            ]}
+          >{`\u2665 ${favoritesCount}`}</Text>
+        )}
       </TouchableHighlight>
     </View>
   );
@@ -62,13 +89,13 @@ const styles = StyleSheet.create({
     borderColor: "#5CB85C",
     borderWidth: 1,
   },
-  favoriteDisabled: {
+  favoriteActive: {
     backgroundColor: "#5CB85C",
   },
   favoriteView: {
     color: "#5CB85C",
   },
-  favoriteViewDisabled: {
+  favoriteViewActive: {
     color: "#fff",
   },
 });

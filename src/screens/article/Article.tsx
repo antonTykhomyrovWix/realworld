@@ -7,11 +7,13 @@ import {
   ScrollView,
 } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { useConnect } from "remx";
 
-import { RootStackParamList, screenName } from "../../navigation";
 import { commonStyles } from "../../style-sheets";
+import { RootStackParamList, screenName } from "../../navigation";
 import { articlesService, commentsService } from "../../services";
 import { Article as ArticleType, Comment } from "../../types";
+import { articlesStore } from "../../stores";
 import { ArticleMetaInfo } from "../../components/article-meta-info";
 import { TagsList } from "../../components/tags-list";
 import { Comments } from "../../components/comments";
@@ -23,10 +25,14 @@ type ArticleProps = NativeStackScreenProps<
 
 export function Article({ route }: ArticleProps) {
   const [loading, setLoading] = useState<boolean>(true);
-  const [article, setArticle] = useState<ArticleType | undefined>();
   const [comments, setComments] = useState<
     ReadonlyArray<Comment> | undefined
   >();
+  // TODO:useConnect type error
+  // @ts-ignore
+  const article = useConnect<ArticleType | undefined, []>(
+    articlesStore.getOpenArticle
+  );
 
   useEffect(() => {
     const fetchArticleData = async () => {
@@ -38,7 +44,7 @@ export function Article({ route }: ArticleProps) {
         commentsService.getComments(articleSlug),
       ]);
 
-      setArticle(fetchedArticle);
+      articlesStore.setOpenArticle(fetchedArticle);
       setComments(fetchedComments);
       setLoading(false);
     };

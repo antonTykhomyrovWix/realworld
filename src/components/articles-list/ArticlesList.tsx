@@ -8,8 +8,7 @@ import {
 } from "react-native";
 import { useConnect } from "remx";
 
-import { feedStore, FeedType, tagsStore } from "../../stores";
-import { Article } from "../../types";
+import { feedStore, FeedType, tagsStore, articlesStore } from "../../stores";
 import { articlesService } from "../../services";
 import { ArticleItem } from "./ArticleItem";
 import { commonStyles } from "../../style-sheets";
@@ -19,7 +18,6 @@ type ArticlesListProps = Readonly<{
 }>;
 
 export function ArticlesList({ goToArticle }: ArticlesListProps) {
-  const [articles, setArticles] = useState<ReadonlyArray<Article>>([]);
   const [loading, setLoading] = useState<boolean>(true);
   // TODO:useConnect type error
   // @ts-ignore
@@ -28,6 +26,7 @@ export function ArticlesList({ goToArticle }: ArticlesListProps) {
   );
   // @ts-ignore
   const activeTag = useConnect<string | undefined, []>(tagsStore.getActiveTag);
+  const articles = useConnect(articlesStore.getArticles);
 
   useEffect(() => {
     const fetchArticles = async () => {
@@ -37,7 +36,7 @@ export function ArticlesList({ goToArticle }: ArticlesListProps) {
           ? await articlesService.getUserFeedArticles()
           : await articlesService.getArticles(activeTag);
 
-      setArticles(newArticles);
+      articlesStore.setArticles(newArticles);
       setLoading(false);
     };
 
