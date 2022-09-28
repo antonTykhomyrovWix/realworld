@@ -23,10 +23,7 @@ export function ArticleHeader({ article }: ArticleHeaderProps) {
       <Text style={styles.username}>{author.username}</Text>
       <Text style={styles.date}>{date.toLocaleDateString()}</Text>
       <TouchableHighlight
-        style={[
-          styles.favorite,
-          favorited ? styles.favoriteDisabled : undefined,
-        ]}
+        style={[styles.favorite, favorited && styles.favoriteDisabled]}
         underlayColor="#A5D9A5"
         onPress={() => console.log("Like")}
         disabled={favorited}
@@ -34,7 +31,7 @@ export function ArticleHeader({ article }: ArticleHeaderProps) {
         <Text
           style={[
             styles.favoriteView,
-            favorited ? styles.favoriteViewDisabled : undefined,
+            favorited && styles.favoriteViewDisabled,
           ]}
         >{`\u2665 ${favoritesCount}`}</Text>
       </TouchableHighlight>

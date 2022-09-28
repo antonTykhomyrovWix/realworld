@@ -9,6 +9,9 @@ import { tagsService } from "../../services";
 export function TagsList() {
   const isLoading = useConnect(tagsStore.getLoading);
   const tags = useConnect(tagsStore.getTags);
+  // TODO:useConnect type error
+  // @ts-ignore
+  const activeTag = useConnect<string | undefined, []>(tagsStore.getActiveTag);
 
   useEffect(() => {
     const fetchTags = async () => {
@@ -32,7 +35,9 @@ export function TagsList() {
       ) : (
         <FlatList
           data={tags}
-          renderItem={TagItem}
+          renderItem={({ item }) => (
+            <TagItem tag={item} isActive={activeTag === item} />
+          )}
           keyExtractor={(item) => item}
           horizontal={true}
         />

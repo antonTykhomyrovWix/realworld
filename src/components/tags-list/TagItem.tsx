@@ -5,24 +5,26 @@ import { tagsStore } from "../../stores";
 import { Tag } from "../../types/tags";
 
 type TagItemProps = Readonly<{
-  item: Tag;
+  tag: Tag;
+  isActive: boolean;
 }>;
 
-export function TagItem({ item }: TagItemProps) {
+export function TagItem({ tag, isActive }: TagItemProps) {
   const onSelectTag = () => {
-    const activeTag = tagsStore.getActiveTag();
-
-    if (activeTag === item) {
+    if (isActive) {
       tagsStore.setActiveTag(undefined);
     } else {
-      tagsStore.setActiveTag(item);
+      tagsStore.setActiveTag(tag);
     }
   };
 
   return (
     <View style={styles.item}>
-      <Text style={styles.text} onPress={onSelectTag}>
-        {item}
+      <Text
+        style={[styles.text, isActive && styles.activeTag]}
+        onPress={onSelectTag}
+      >
+        {tag}
       </Text>
     </View>
   );
@@ -39,5 +41,8 @@ const styles = StyleSheet.create({
   },
   text: {
     color: "#fff",
+  },
+  activeTag: {
+    textDecorationLine: "underline",
   },
 });

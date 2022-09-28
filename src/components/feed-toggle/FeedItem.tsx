@@ -17,9 +17,9 @@ type FeedItemProps = Feed &
 
 export function FeedItem({ title, isActive, onSelectFeed }: FeedItemProps) {
   return (
-    <View style={[styles.item, isActive ? styles.activeItem : undefined]}>
+    <View style={[styles.item, isActive && styles.activeItem]}>
       <Text
-        style={[styles.text, isActive ? styles.activeText : undefined]}
+        style={[styles.text, isActive && styles.activeText]}
         onPress={onSelectFeed}
       >
         {title}
