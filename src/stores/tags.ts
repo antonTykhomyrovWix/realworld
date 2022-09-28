@@ -1,10 +1,10 @@
 import { state, setters, getters } from "remx";
 
-import { Tag, Tags } from "../types/tags";
+import { Tag } from "../types/tags";
 
 type TagsState = {
   loading: boolean;
-  tags: Tags;
+  tags: ReadonlyArray<Tag>;
   activeTag: Tag | undefined;
 };
 
@@ -20,7 +20,7 @@ const tagsSetters = setters({
   setLoading(loading: boolean) {
     tagsState.loading = loading;
   },
-  setTags(tags: Tags) {
+  setTags(tags: ReadonlyArray<Tag>) {
     tagsState.tags = tags;
   },
   setActiveTag(tag: Tag | undefined) {

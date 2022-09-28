@@ -13,7 +13,7 @@ type ArticleHeaderProps = Readonly<{
   article: Article;
 }>;
 
-export function ArticleHeader({ article }: ArticleHeaderProps) {
+export function ArticleMetaInfo({ article }: ArticleHeaderProps) {
   const { createdAt, author, favoritesCount, favorited } = article;
   const date = new Date(createdAt);
 

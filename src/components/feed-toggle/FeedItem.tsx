@@ -30,7 +30,7 @@ export function FeedItem({ title, isActive, onSelectFeed }: FeedItemProps) {
 
 const styles = StyleSheet.create({
   item: {
-    marginHorizontal: 6,
+    marginHorizontal: 8,
     marginTop: 8,
   },
   activeItem: {

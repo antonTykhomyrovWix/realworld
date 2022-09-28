@@ -1,47 +1,31 @@
-import React, { useEffect } from "react";
-import { ActivityIndicator, FlatList, View } from "react-native";
-import { useConnect } from "remx";
+import React from "react";
+import { FlatList, View } from "react-native";
 
 import { TagItem } from "./TagItem";
-import { tagsStore } from "../../stores";
-import { tagsService } from "../../services";
+import { Tag } from "../../types/tags";
 
-export function TagsList() {
-  const isLoading = useConnect(tagsStore.getLoading);
-  const tags = useConnect(tagsStore.getTags);
-  // TODO:useConnect type error
-  // @ts-ignore
-  const activeTag = useConnect<string | undefined, []>(tagsStore.getActiveTag);
+type TagsListProps = Readonly<{
+  tags: ReadonlyArray<Tag>;
+  onTagClick?: (tag: Tag) => void;
+  activeTag?: Tag;
+}>;
 
-  useEffect(() => {
-    const fetchTags = async () => {
-      tagsStore.setLoading(true);
-      const newTags = await tagsService.getTags();
-
-      if (newTags) {
-        tagsStore.setTags(newTags);
-      }
-
-      tagsStore.setLoading(false);
-    };
-
-    fetchTags();
-  }, []);
-
+export function TagsList({ tags, onTagClick, activeTag }: TagsListProps) {
   return (
     <View>
-      {isLoading ? (
-        <ActivityIndicator />
-      ) : (
-        <FlatList
-          data={tags}
-          renderItem={({ item }) => (
-            <TagItem tag={item} isActive={activeTag === item} />
-          )}
-          keyExtractor={(item) => item}
-          horizontal={true}
-        />
-      )}
+      <FlatList
+        data={tags}
+        renderItem={({ item, index }) => (
+          <TagItem
+            tag={item}
+            isActive={activeTag === item}
+            isLast={index === tags.length - 1}
+            onClick={() => onTagClick?.(item)}
+          />
+        )}
+        keyExtractor={(item) => item}
+        horizontal={true}
+      />
     </View>
   );
 }

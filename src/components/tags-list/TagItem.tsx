@@ -1,28 +1,21 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-import { tagsStore } from "../../stores";
 import { Tag } from "../../types/tags";
 
 type TagItemProps = Readonly<{
   tag: Tag;
   isActive: boolean;
+  isLast: boolean;
+  onClick: () => void;
 }>;
 
-export function TagItem({ tag, isActive }: TagItemProps) {
-  const onSelectTag = () => {
-    if (isActive) {
-      tagsStore.setActiveTag(undefined);
-    } else {
-      tagsStore.setActiveTag(tag);
-    }
-  };
-
+export function TagItem({ tag, isActive, onClick, isLast }: TagItemProps) {
   return (
-    <View style={styles.item}>
+    <View style={[styles.item, isLast && styles.itemLast]}>
       <Text
         style={[styles.text, isActive && styles.activeTag]}
-        onPress={onSelectTag}
+        onPress={onClick}
       >
         {tag}
       </Text>
@@ -34,10 +27,14 @@ const styles = StyleSheet.create({
   item: {
     height: 26,
     borderRadius: 13,
-    padding: 4,
+    paddingVertical: 4,
+    paddingHorizontal: 6,
     marginVertical: 4,
-    marginHorizontal: 4,
+    marginLeft: 8,
     backgroundColor: "#818a91",
+  },
+  itemLast: {
+    marginRight: 8,
   },
   text: {
     color: "#fff",

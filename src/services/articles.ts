@@ -17,6 +17,7 @@ class ArticlesService {
     // assert typeguard
     return articles ?? [];
   }
+
   async getArticles(tag?: string): Promise<ReadonlyArray<Article>> {
     let url = `${API_URL}/articles?`;
 
@@ -35,6 +36,20 @@ class ArticlesService {
 
     // assert typeguard
     return articles;
+  }
+
+  async getArticle(slug: string): Promise<Article | undefined> {
+    const response = await fetch(`${API_URL}/articles/${slug}`, {
+      headers: getHeaders(),
+    });
+    const { article, errors } = await response.json();
+
+    if (errors) {
+      return undefined;
+    }
+
+    // assert typeguard
+    return article;
   }
 }
 

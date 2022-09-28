@@ -1,10 +1,10 @@
-import { Tags } from "../types/tags";
+import { Tag } from "../types/tags";
 import { API_URL } from "./constants";
 import { getHeaders } from "./headers";
 
 //TODO: add try/catch
 class TagsService {
-  async getTags(): Promise<Tags | undefined> {
+  async getTags(): Promise<ReadonlyArray<Tag> | undefined> {
     const response = await fetch(`${API_URL}/tags`, {
       headers: getHeaders(),
     });
