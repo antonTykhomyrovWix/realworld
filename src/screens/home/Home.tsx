@@ -52,6 +52,11 @@ export function Home({ navigation }: HomeProps) {
     [navigation]
   );
 
+  const goToSignIn = useCallback(
+    () => navigation.navigate(screenName.signIn),
+    [navigation]
+  );
+
   return (
     <View style={styles.container}>
       <View style={styles.tagsContainer}>
@@ -63,7 +68,7 @@ export function Home({ navigation }: HomeProps) {
       </View>
 
       <FeedToggle />
-      <ArticlesList goToArticle={goToArticle} />
+      <ArticlesList goToArticle={goToArticle} goToSignIn={goToSignIn} />
     </View>
   );
 }

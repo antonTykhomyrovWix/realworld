@@ -23,7 +23,7 @@ type ArticleProps = NativeStackScreenProps<
   screenName.article
 >;
 
-export function Article({ route }: ArticleProps) {
+export function Article({ route, navigation }: ArticleProps) {
   const [loading, setLoading] = useState<boolean>(true);
   const [comments, setComments] = useState<
     ReadonlyArray<Comment> | undefined
@@ -32,6 +32,11 @@ export function Article({ route }: ArticleProps) {
   // @ts-ignore
   const article = useConnect<ArticleType | undefined, []>(
     articlesStore.getOpenArticle
+  );
+
+  const goToSignIn = useCallback(
+    () => navigation.navigate(screenName.signIn),
+    [navigation]
   );
 
   useEffect(() => {
@@ -80,7 +85,11 @@ export function Article({ route }: ArticleProps) {
     <ScrollView>
       <View style={[styles.paddingBlock, styles.headerContainer]}>
         <Text style={styles.title}>{article.title}</Text>
-        <ArticleMetaInfo article={article} />
+        <ArticleMetaInfo
+          article={article}
+          goToSignIn={goToSignIn}
+          withFollowUser={true}
+        />
       </View>
       <View style={styles.paddingBlock}>
         <Text>{article.body}</Text>

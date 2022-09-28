@@ -8,14 +8,23 @@ import { ArticleFooter } from "./ArticleFooter";
 type ArticleItemProps = Readonly<{
   article: Article;
   onSelectArticle: () => void;
+  goToSignIn: () => void;
 }>;
 
-export function ArticleItem({ article, onSelectArticle }: ArticleItemProps) {
+export function ArticleItem({
+  article,
+  onSelectArticle,
+  goToSignIn,
+}: ArticleItemProps) {
   const { title, description } = article;
 
   return (
     <View style={styles.container}>
-      <ArticleMetaInfo article={article} />
+      <ArticleMetaInfo
+        article={article}
+        goToSignIn={goToSignIn}
+        withFollowUser={false}
+      />
       <View>
         <Text style={styles.title} onPress={onSelectArticle}>
           {title}

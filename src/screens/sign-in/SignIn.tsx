@@ -61,7 +61,7 @@ export function SignIn({ navigation }: SignInProps) {
     }
 
     userStore.setCurrentUser(data);
-    navigation.navigate(screenName.home);
+    navigation.goBack();
   }, [validateForm, email, password, navigation]);
 
   return (
