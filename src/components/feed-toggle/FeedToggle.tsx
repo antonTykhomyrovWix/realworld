@@ -1,14 +1,13 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect } from "react";
 import { FlatList, StyleSheet } from "react-native";
 import { useConnect } from "remx";
 
-import { feedStore, FeedType, tagsStore, userStore } from "../../stores";
-import { User } from "../../types";
+import { feedsStore, tagsStore, userStore } from "../../stores";
+import { Tag, User, FeedType, Feed } from "../../types";
 import { assertUnreachable } from "../../utils";
-import { Feed, FeedItem } from "./FeedItem";
+import { FeedItem } from "./FeedItem";
 
 export function FeedToggle() {
-  const [feedList, setFeedList] = useState<ReadonlyArray<Feed>>([]);
   // TODO:useConnect type error
   // @ts-ignore
   const activeTag = useConnect<string | undefined, []>(tagsStore.getActiveTag);
@@ -17,52 +16,28 @@ export function FeedToggle() {
     userStore.getCurrentUser
   );
   // @ts-ignore
-  const activeFeed = useConnect<FeedType | undefined, []>(
-    feedStore.getActiveFeed
-  );
-  const feedTypes = useConnect(feedStore.getFeeds);
+  const activeFeed = useConnect<Feed | undefined, []>(feedsStore.getActiveFeed);
+  const feeds = useConnect(feedsStore.getFeeds);
 
   useEffect(() => {
-    console.log("UseEffect currentUser activeTag", currentUser, activeTag);
+    const feed = feedsStore.getActiveFeed();
     if (activeTag) {
-      feedStore.setActiveFeed(FeedType.Tag);
-    } else {
-      feedStore.setActiveFeed(currentUser ? FeedType.Your : FeedType.Global);
+      return feedsStore.setActiveFeed({
+        type: FeedType.Tag,
+      });
+    }
+
+    if (feed === undefined || feed.type === FeedType.Tag) {
+      feedsStore.setActiveFeed({
+        type: currentUser ? FeedType.Your : FeedType.Global,
+      });
     }
   }, [currentUser, activeTag]);
 
-  useEffect(() => {
-    const list = Array.from(feedTypes)
-      .map<Feed>((type) => {
-        switch (type) {
-          case FeedType.Your:
-            return {
-              type,
-              title: getFeedTitle(type),
-              isHidden: !currentUser,
-            };
-          case FeedType.Global:
-            return {
-              type,
-              title: getFeedTitle(type),
-              isHidden: false,
-            };
-          case FeedType.Tag:
-            return {
-              type,
-              title: `#${activeTag}`,
-              isHidden: !activeTag,
-            };
-          default:
-            assertUnreachable(type);
-        }
-      })
-      .filter((feed) => feed !== undefined && !feed.isHidden);
-    setFeedList(list);
-  }, [feedTypes, activeTag, currentUser]);
-
   const onSelectFeed = useCallback((type: FeedType) => {
-    feedStore.setActiveFeed(type);
+    feedsStore.setActiveFeed({
+      type,
+    });
     // reset tag because other feed chosen
     tagsStore.setActiveTag(undefined);
   }, []);
@@ -70,12 +45,13 @@ export function FeedToggle() {
   return (
     <FlatList
       style={styles.container}
-      data={feedList}
-      renderItem={({ item }) => (
+      data={feeds}
+      renderItem={({ item: { type } }) => (
         <FeedItem
-          {...item}
-          isActive={activeFeed === item.type}
-          onSelectFeed={() => onSelectFeed(item.type)}
+          title={getTitle(type, activeTag)}
+          isHidden={getIsHidden(type, activeTag, currentUser)}
+          isActive={activeFeed?.type === type}
+          onSelectFeed={() => onSelectFeed(type)}
         />
       )}
       keyExtractor={(item) => item.type.toString()}
@@ -92,13 +68,32 @@ const styles = StyleSheet.create({
   },
 });
 
-function getFeedTitle(type: FeedType): string {
+function getTitle(type: FeedType, activeTag?: Tag): string {
   switch (type) {
     case FeedType.Your:
       return "Your Feed";
     case FeedType.Global:
       return "Global Feed";
+    case FeedType.Tag:
+      return `#${activeTag}`;
     default:
-      return "";
+      assertUnreachable(type);
+  }
+}
+
+function getIsHidden(
+  type: FeedType,
+  activeTag?: Tag,
+  currentUser?: User
+): boolean {
+  switch (type) {
+    case FeedType.Global:
+      return false;
+    case FeedType.Your:
+      return currentUser === undefined;
+    case FeedType.Tag:
+      return activeTag === undefined;
+    default:
+      assertUnreachable(type);
   }
 }

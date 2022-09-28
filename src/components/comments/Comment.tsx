@@ -23,7 +23,6 @@ export function Comment({ comment }: CommentProps) {
 
 const styles = StyleSheet.create({
   container: {
-    // padding: 8,
     borderWidth: 1,
     marginBottom: 8,
     borderColor: "#e5e5e5",

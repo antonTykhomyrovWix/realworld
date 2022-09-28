@@ -1,21 +1,23 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-import { FeedType } from "../../stores";
-
-export type Feed = Readonly<{
-  type: FeedType;
+type FeedItemProps = Readonly<{
   title: string;
   isHidden: boolean;
+  isActive: boolean;
+  onSelectFeed: () => void;
 }>;
 
-type FeedItemProps = Feed &
-  Readonly<{
-    isActive: boolean;
-    onSelectFeed: () => void;
-  }>;
+export function FeedItem({
+  title,
+  isActive,
+  isHidden,
+  onSelectFeed,
+}: FeedItemProps) {
+  if (isHidden) {
+    return null;
+  }
 
-export function FeedItem({ title, isActive, onSelectFeed }: FeedItemProps) {
   return (
     <View style={[styles.item, isActive && styles.activeItem]}>
       <Text

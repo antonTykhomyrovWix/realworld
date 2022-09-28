@@ -1,4 +1,4 @@
 export { articlesStore } from "./articles";
-export { feedStore, FeedType } from "./feed";
+export { feedsStore } from "./feeds";
 export { tagsStore } from "./tags";
 export { userStore } from "./user";
