@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList, screenName } from "../../navigation";
-import { profilesService, userService } from "../../services";
+import { profilesService } from "../../services";
 import { profileStore, userStore } from "../../stores";
 import { commonStyles } from "../../style-sheets";
 import { FeedType, Profile as ProfileType } from "../../types";
@@ -74,8 +74,7 @@ export function Profile({ navigation, route }: ProfileProps) {
 
   const onLogout = useCallback(async () => {
     setLogoutLoading(true);
-    await userService.logout();
-    userStore.setCurrentUser(undefined);
+    await userStore.logout();
     setLogoutLoading(false);
 
     navigation.navigate(screenName.home);

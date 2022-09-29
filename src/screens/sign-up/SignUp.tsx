@@ -52,20 +52,15 @@ export function SignUp({ navigation }: SignUpProps) {
     }
 
     setSignUpLoading(true);
-    const data = await userService.register(username, email, password);
+    const user = await userService.register(username, email, password);
     setSignUpLoading(false);
 
-    if (typeof data === "string") {
-      setErrors(data);
+    if (!user) {
+      setErrors("Can not create user");
       return;
     }
 
-    if (!data) {
-      setErrors("User is not found");
-      return;
-    }
-
-    userStore.setCurrentUser(data);
+    userStore.setCurrentUser(user);
     navigation.navigate(screenName.home);
   }, [validateForm, username, email, password, navigation]);
 

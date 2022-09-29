@@ -84,10 +84,16 @@ export function Home({ navigation }: HomeProps) {
   return (
     <View style={styles.container}>
       <View style={styles.tagsContainer}>
-        {isTagsLoading || !tags ? (
+        {isTagsLoading ? (
           <ActivityIndicator />
         ) : (
-          <TagsList tags={tags} onTagClick={onTagClick} activeTag={activeTag} />
+          tags && (
+            <TagsList
+              tags={tags}
+              onTagClick={onTagClick}
+              activeTag={activeTag}
+            />
+          )
         )}
       </View>
 
@@ -100,7 +106,7 @@ export function Home({ navigation }: HomeProps) {
       />
       <ArticlesList
         activeFeed={activeFeed}
-        activeTag={activeTag}
+        tag={activeTag}
         goToArticle={goToArticle}
         goToSignIn={goToSignIn}
         goToProfile={goToProfile}

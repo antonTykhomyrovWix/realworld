@@ -1,6 +1,7 @@
 import { state, setters, getters } from "remx";
 
 import { User } from "../types";
+import { userService } from "../services";
 
 type UserState = {
   loading: boolean;
@@ -19,8 +20,13 @@ const userSetters = setters({
     userState.loading = isLoading;
   },
 
-  setCurrentUser(currentUser: User | undefined) {
+  setCurrentUser(currentUser: User) {
     userState.currentUser = currentUser;
+  },
+
+  logout() {
+    userState.currentUser = undefined;
+    userService.logout();
   },
 });
 

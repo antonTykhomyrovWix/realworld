@@ -1,37 +1,39 @@
 import { Article } from "../types";
-import { API_URL } from "./constants";
-import { getHeaders } from "./headers";
+import { RestAPI } from "./restAPI";
 
-//TODO: add try/catch
-class FavoriteService {
+type FavoriteResponse = Readonly<{
+  article?: Article;
+}>;
+
+const FAVORITE_API_PATH = "/articles";
+
+class FavoriteService extends RestAPI {
+  protected alertErrorTitle = "Favorite Service Error";
+
   async favorite(slug: string): Promise<Article | undefined> {
-    const response = await fetch(`${API_URL}/articles/${slug}/favorite`, {
-      method: "POST",
-      headers: getHeaders(),
-    });
-    const { article, errors } = await response.json();
+    const response = await this.post<FavoriteResponse>(
+      `${FAVORITE_API_PATH}/${slug}/favorite`
+    );
 
-    if (errors) {
+    if (response instanceof Error) {
+      this.showErrorAlert(response, `Can't favorite article: ${slug}`);
       return undefined;
     }
 
-    // assert typeguard
-    return article;
+    return response.article;
   }
 
   async unfavorite(slug: string): Promise<Article | undefined> {
-    const response = await fetch(`${API_URL}/articles/${slug}/favorite`, {
-      method: "DELETE",
-      headers: getHeaders(),
-    });
-    const { article, errors } = await response.json();
+    const response = await this.delete<FavoriteResponse>(
+      `${FAVORITE_API_PATH}/${slug}/favorite`
+    );
 
-    if (errors) {
+    if (response instanceof Error) {
+      this.showErrorAlert(response, `Can't unfavorite article: ${slug}`);
       return undefined;
     }
 
-    // assert typeguard
-    return article;
+    return response.article;
   }
 }
 

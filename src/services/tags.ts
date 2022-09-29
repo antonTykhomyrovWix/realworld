@@ -1,17 +1,24 @@
 import { Tag } from "../types";
-import { API_URL } from "./constants";
-import { getHeaders } from "./headers";
+import { RestAPI } from "./restAPI";
 
-//TODO: add try/catch
-class TagsService {
+type TagsResponse = Readonly<{
+  tags?: ReadonlyArray<Tag>;
+}>;
+
+const TAGS_API_PATH = "/tags";
+
+class TagsService extends RestAPI {
+  protected alertErrorTitle = "Tags Service Error";
+
   async getTags(): Promise<ReadonlyArray<Tag> | undefined> {
-    const response = await fetch(`${API_URL}/tags`, {
-      headers: getHeaders(),
-    });
-    const { tags } = await response.json();
+    const response = await this.get<TagsResponse>(TAGS_API_PATH);
 
-    // assert typeguard
-    return tags ?? [];
+    if (response instanceof Error) {
+      this.showErrorAlert(response, "Can't fetch tags");
+      return undefined;
+    }
+
+    return response.tags;
   }
 }
 

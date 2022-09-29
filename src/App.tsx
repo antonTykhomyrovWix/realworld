@@ -13,7 +13,9 @@ export function App() {
   useEffect(() => {
     const fetchCurrentUser = async () => {
       const user = await userService.getCurrent();
-      userStore.setCurrentUser(user);
+      if (user) {
+        userStore.setCurrentUser(user);
+      }
       userStore.setLoading(false);
     };
 

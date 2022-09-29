@@ -19,7 +19,7 @@ type ArticlesListProps = Readonly<{
   goToArticle: (articleSlug: string) => void;
   goToSignIn: () => void;
   goToProfile: (username: string) => void;
-  activeTag?: Tag | undefined;
+  tag?: Tag | undefined;
   username?: string | undefined;
 }>;
 
@@ -28,7 +28,7 @@ export function ArticlesList({
   goToSignIn,
   goToProfile,
   activeFeed,
-  activeTag,
+  tag,
   username,
 }: ArticlesListProps) {
   const [loading, setLoading] = useState<boolean>(true);
@@ -52,14 +52,21 @@ export function ArticlesList({
       const newArticles =
         activeFeed === FeedType.Your
           ? await articlesService.getUserFeedArticles()
-          : await articlesService.getArticles(activeTag, author, favorited);
+          : await articlesService.getArticles({
+              tag,
+              author,
+              favorited,
+            });
 
-      articlesStore.setArticles(newArticles);
+      if (newArticles) {
+        articlesStore.setArticles(newArticles);
+      }
+
       setLoading(false);
     };
 
     fetchArticles();
-  }, [activeTag, activeFeed, currentUser, username]);
+  }, [tag, activeFeed, currentUser, username]);
 
   if (loading) {
     return (

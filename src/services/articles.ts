@@ -1,65 +1,70 @@
 import { Article } from "../types";
-import { API_URL } from "./constants";
-import { getHeaders } from "./headers";
+import { RestAPI } from "./restAPI";
+
+type ArticlesQueryParameters = Readonly<{
+  tag?: string;
+  author?: string;
+  favorited?: string;
+}>;
+
+type ArticlesResponse = Readonly<{
+  articles?: ReadonlyArray<Article>;
+}>;
+
+type ArticleResponse = Readonly<{
+  article?: Article;
+}>;
+
+const ARTICLES_API_PATH = "/articles";
 
 //TODO: add try/catch
-class ArticlesService {
-  async getUserFeedArticles(): Promise<ReadonlyArray<Article>> {
-    const response = await fetch(`${API_URL}/articles/feed`, {
-      headers: getHeaders(),
-    });
-    const { articles, errors } = await response.json();
+class ArticlesService extends RestAPI {
+  protected alertErrorTitle = "Articles Service Error";
 
-    if (errors) {
-      return [];
-    }
+  async getUserFeedArticles(): Promise<ReadonlyArray<Article> | undefined> {
+    const response = await this.get<ArticlesResponse>(
+      `${ARTICLES_API_PATH}/feed`
+    );
 
-    // assert typeguard
-    return articles ?? [];
-  }
-
-  async getArticles(
-    tag?: string,
-    author?: string,
-    favorited?: string
-  ): Promise<ReadonlyArray<Article>> {
-    let url = `${API_URL}/articles?`;
-
-    if (tag) {
-      url += `tag=${tag}&`;
-    }
-    if (author) {
-      url += `author=${author}&`;
-    }
-    if (favorited) {
-      url += `favorited=${favorited}&`;
-    }
-
-    const response = await fetch(url, {
-      headers: getHeaders(),
-    });
-    const { articles, errors } = await response.json();
-
-    if (errors) {
-      return [];
-    }
-
-    // assert typeguard
-    return articles;
-  }
-
-  async getArticle(slug: string): Promise<Article | undefined> {
-    const response = await fetch(`${API_URL}/articles/${slug}`, {
-      headers: getHeaders(),
-    });
-    const { article, errors } = await response.json();
-
-    if (errors) {
+    if (response instanceof Error) {
+      this.showErrorAlert(response, `Can't fetch feed articles`);
       return undefined;
     }
 
-    // assert typeguard
-    return article;
+    return response.articles;
+  }
+
+  async getArticles(
+    params: ArticlesQueryParameters
+  ): Promise<ReadonlyArray<Article> | undefined> {
+    const query = Object.entries(params)
+      .filter(([_, value]) => !!value)
+      .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+      .join("&");
+
+    const response = await this.get<ArticlesResponse>(
+      `${ARTICLES_API_PATH}?${query}`
+    );
+
+    if (response instanceof Error) {
+      this.showErrorAlert(response, `Can't fetch articles`);
+      return undefined;
+    }
+
+    return response.articles;
+  }
+
+  async getArticle(slug: string): Promise<Article | undefined> {
+    const response = await this.get<ArticleResponse>(
+      `${ARTICLES_API_PATH}/${slug}`
+    );
+
+    if (response instanceof Error) {
+      this.showErrorAlert(response, `Can't fetch article`);
+      return undefined;
+    }
+
+    return response.article;
   }
 }
 

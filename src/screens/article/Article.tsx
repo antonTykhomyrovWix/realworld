@@ -82,7 +82,7 @@ export function Article({ route, navigation }: ArticleProps) {
     [route.params.articleSlug, comments]
   );
 
-  if (loading || !article || !comments) {
+  if (loading || !article) {
     return (
       <View style={commonStyles.flexCenter}>
         <ActivityIndicator />
@@ -109,11 +109,13 @@ export function Article({ route, navigation }: ArticleProps) {
       </View>
 
       <View style={styles.paddingBlock}>
-        <Comments
-          comments={comments}
-          postComment={postComment}
-          goToProfile={goToProfile}
-        />
+        {comments && (
+          <Comments
+            comments={comments}
+            postComment={postComment}
+            goToProfile={goToProfile}
+          />
+        )}
       </View>
     </ScrollView>
   );
