@@ -11,7 +11,6 @@ type CommentResponse = Readonly<{
 
 const COMMENT_API_PATH = "/articles";
 
-//TODO: add try/catch
 class CommentsService extends RestAPI {
   protected alertErrorTitle = "Comment Service Error";
 

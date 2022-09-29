@@ -17,7 +17,6 @@ type ArticleResponse = Readonly<{
 
 const ARTICLES_API_PATH = "/articles";
 
-//TODO: add try/catch
 class ArticlesService extends RestAPI {
   protected alertErrorTitle = "Articles Service Error";
 
