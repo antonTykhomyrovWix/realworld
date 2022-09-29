@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { useConnect } from "remx";
 
-import { articlesStore, userStore } from "../../stores";
+import { articlesStore } from "../../stores";
 import { articlesService } from "../../services";
 import { commonStyles } from "../../style-sheets";
 import { FeedType, Tag } from "../../types";
@@ -22,7 +22,6 @@ type ArticlesListProps = Readonly<{
 
 export function ArticlesList({ activeFeed, tag, username }: ArticlesListProps) {
   const [loading, setLoading] = useState<boolean>(true);
-  const { currentUser } = useConnect(userStore.getCurrentUser);
   const articles = useConnect(articlesStore.getArticles);
 
   useEffect(() => {
@@ -50,7 +49,7 @@ export function ArticlesList({ activeFeed, tag, username }: ArticlesListProps) {
     };
 
     fetchArticles();
-  }, [tag, activeFeed, currentUser, username]);
+  }, [tag, activeFeed, username]);
 
   if (loading) {
     return (
