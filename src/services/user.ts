@@ -41,7 +41,7 @@ class UserService extends RestAPI {
     });
 
     if (response instanceof Error) {
-      this.showErrorAlert(response, `Can't login: ${JSON.stringify(user)}`);
+      this.showErrorAlert(response, `Can't login`);
       return undefined;
     }
 
@@ -67,7 +67,7 @@ class UserService extends RestAPI {
     });
 
     if (response instanceof Error) {
-      this.showErrorAlert(response, `Can't register: ${JSON.stringify(user)}`);
+      this.showErrorAlert(response, `Can't register`);
       return undefined;
     }
 
