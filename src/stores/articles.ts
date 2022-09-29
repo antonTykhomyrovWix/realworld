@@ -33,7 +33,7 @@ const articlesSetters = setters({
       articlesState.articles = articles;
     }
   },
-  updateAuthor(author: Profile) {
+  updateAuthors(author: Profile) {
     if (author.username === articlesState.openArticle?.author.username) {
       articlesState.openArticle = {
         ...articlesState.openArticle,

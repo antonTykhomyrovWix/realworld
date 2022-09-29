@@ -18,7 +18,7 @@ type FollowAuthorProps = Readonly<{
   goToSignIn: () => void;
 }>;
 
-export function FollowAuthor({
+export function FollowProfile({
   following,
   username,
   goToSignIn,
@@ -41,13 +41,13 @@ export function FollowAuthor({
     }
 
     setFollowLoading(true);
-    const updatedAuthor = following
+    const updatedProfile = following
       ? await profilesService.unfollow(username)
       : await profilesService.follow(username);
 
-    if (updatedAuthor) {
-      articlesStore.updateAuthor(updatedAuthor);
-      profileStore.updateProfile(updatedAuthor);
+    if (updatedProfile) {
+      articlesStore.updateAuthors(updatedProfile);
+      profileStore.updateProfile(updatedProfile);
     }
 
     setFollowLoading(false);

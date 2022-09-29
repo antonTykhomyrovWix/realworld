@@ -3,7 +3,7 @@ import { Image, StyleSheet, Text, View } from "react-native";
 
 import { Article } from "../../types";
 import { ArticleFavorite } from "./ArticleFavorite";
-import { FollowAuthor } from "../follow-author";
+import { FollowProfile } from "../follow-profile";
 
 type ArticleHeaderProps = Readonly<{
   article: Article;
@@ -35,7 +35,7 @@ export function ArticleMetaInfo({
       <Text style={styles.date}>{date.toLocaleDateString()}</Text>
       <View style={styles.rightActions}>
         {withFollowUser && (
-          <FollowAuthor
+          <FollowProfile
             username={author.username}
             following={author.following}
             goToSignIn={goToSignIn}

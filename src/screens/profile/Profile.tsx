@@ -15,7 +15,7 @@ import { profileStore, userStore } from "../../stores";
 import { commonStyles } from "../../style-sheets";
 import { Profile as ProfileType } from "../../types";
 import { useConnect } from "remx";
-import { FollowAuthor } from "../../components/follow-author";
+import { FollowProfile } from "../../components/follow-profile";
 
 type ProfileProps = NativeStackScreenProps<
   RootStackParamList,
@@ -88,7 +88,7 @@ export function Profile({ navigation, route }: ProfileProps) {
               onPress={onLogout}
             />
           ) : (
-            <FollowAuthor
+            <FollowProfile
               username={profile.username}
               following={profile.following}
               goToSignIn={goToSignIn}

@@ -1,1 +1,0 @@
-export { FollowAuthor } from "./FollowAuthor";
