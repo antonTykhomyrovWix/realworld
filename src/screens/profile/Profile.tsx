@@ -6,25 +6,29 @@ import {
   StyleSheet,
   Text,
   View,
-  ScrollView,
 } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList, screenName } from "../../navigation";
 import { profilesService, userService } from "../../services";
 import { profileStore, userStore } from "../../stores";
 import { commonStyles } from "../../style-sheets";
-import { Profile as ProfileType } from "../../types";
+import { FeedType, Profile as ProfileType } from "../../types";
 import { useConnect } from "remx";
 import { FollowProfile } from "../../components/follow-profile";
+import { FeedToggle } from "../../components/feed-toggle";
+import { ArticlesList } from "../../components/articles-list";
 
 type ProfileProps = NativeStackScreenProps<
   RootStackParamList,
   screenName.profile
 >;
 
+const PROFILE_FEEDS = [FeedType.Profile, FeedType.Favorite];
+
 export function Profile({ navigation, route }: ProfileProps) {
   const [profileLoading, setProfileLoading] = useState<boolean>(false);
   const [logoutLoading, setLogoutLoading] = useState<boolean>(false);
+  const [activeFeed, setActiveFeed] = useState<FeedType>(FeedType.Profile);
   // TODO:useConnect type error
   // @ts-ignore
   const currentUser = useConnect<User | undefined, []>(
@@ -35,8 +39,19 @@ export function Profile({ navigation, route }: ProfileProps) {
     profileStore.getProfile
   );
 
+  const goToArticle = useCallback(
+    (articleSlug: string) =>
+      navigation.navigate(screenName.article, { articleSlug }),
+    [navigation]
+  );
+
   const goToSignIn = useCallback(
     () => navigation.navigate(screenName.signIn),
+    [navigation]
+  );
+
+  const goToProfile = useCallback(
+    (username: string) => navigation.navigate(screenName.profile, { username }),
     [navigation]
   );
 
@@ -75,7 +90,7 @@ export function Profile({ navigation, route }: ProfileProps) {
   }
 
   return (
-    <ScrollView>
+    <View style={styles.container}>
       <View style={styles.header}>
         <Image style={styles.image} source={{ uri: profile.image }} />
         <Text style={styles.username}>{profile.username}</Text>
@@ -96,17 +111,35 @@ export function Profile({ navigation, route }: ProfileProps) {
           )}
         </View>
       </View>
-    </ScrollView>
+      <View style={styles.articleContainer}>
+        <FeedToggle
+          feeds={PROFILE_FEEDS}
+          activeFeed={activeFeed}
+          currentUser={currentUser}
+          selectFeed={setActiveFeed}
+        />
+        <ArticlesList
+          activeFeed={activeFeed}
+          goToArticle={goToArticle}
+          goToSignIn={goToSignIn}
+          goToProfile={goToProfile}
+          username={profile.username}
+        />
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    display: "flex",
+    height: "100%",
+  },
   header: {
     padding: 8,
-    flex: 1,
-    justifyContent: "center",
-    flexDirection: "column",
     alignItems: "center",
+    flexShrink: 1,
+    flexGrow: 0,
     backgroundColor: "#333",
   },
   image: {
@@ -119,5 +152,9 @@ const styles = StyleSheet.create({
     padding: 8,
     fontSize: 18,
     fontWeight: "700",
+  },
+  articleContainer: {
+    flexGrow: 1,
+    flexShrink: 0,
   },
 });

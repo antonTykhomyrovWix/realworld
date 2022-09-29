@@ -2,8 +2,6 @@ export const enum FeedType {
   Your,
   Global,
   Tag,
+  Profile,
+  Favorite,
 }
-
-export type Feed = Readonly<{
-  type: FeedType;
-}>;

@@ -18,11 +18,21 @@ class ArticlesService {
     return articles ?? [];
   }
 
-  async getArticles(tag?: string): Promise<ReadonlyArray<Article>> {
+  async getArticles(
+    tag?: string,
+    author?: string,
+    favorited?: string
+  ): Promise<ReadonlyArray<Article>> {
     let url = `${API_URL}/articles?`;
 
     if (tag) {
       url += `tag=${tag}&`;
+    }
+    if (author) {
+      url += `author=${author}&`;
+    }
+    if (favorited) {
+      url += `favorited=${favorited}&`;
     }
 
     const response = await fetch(url, {

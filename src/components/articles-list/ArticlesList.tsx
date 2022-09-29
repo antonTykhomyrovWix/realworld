@@ -8,27 +8,31 @@ import {
 } from "react-native";
 import { useConnect } from "remx";
 
-import { feedsStore, tagsStore, articlesStore, userStore } from "../../stores";
+import { articlesStore, userStore } from "../../stores";
 import { articlesService } from "../../services";
 import { commonStyles } from "../../style-sheets";
-import { Feed, FeedType, User } from "../../types";
+import { FeedType, Tag, User } from "../../types";
 import { ArticleItem } from "./ArticleItem";
 
 type ArticlesListProps = Readonly<{
+  activeFeed: FeedType;
   goToArticle: (articleSlug: string) => void;
   goToSignIn: () => void;
   goToProfile: (username: string) => void;
+  activeTag?: Tag | undefined;
+  username?: string | undefined;
 }>;
 
 export function ArticlesList({
   goToArticle,
   goToSignIn,
   goToProfile,
+  activeFeed,
+  activeTag,
+  username,
 }: ArticlesListProps) {
   const [loading, setLoading] = useState<boolean>(true);
   // TODO:useConnect type error
-  // @ts-ignore
-  const activeFeed = useConnect<Feed | undefined, []>(feedsStore.getActiveFeed);
   // @ts-ignore
   const currentUser = useConnect<User | undefined, []>(
     userStore.getCurrentUser
@@ -42,17 +46,20 @@ export function ArticlesList({
       }
 
       setLoading(true);
+
+      const author = activeFeed === FeedType.Profile ? username : undefined;
+      const favorited = activeFeed === FeedType.Favorite ? username : undefined;
       const newArticles =
-        activeFeed.type === FeedType.Your
+        activeFeed === FeedType.Your
           ? await articlesService.getUserFeedArticles()
-          : await articlesService.getArticles(tagsStore.getActiveTag());
+          : await articlesService.getArticles(activeTag, author, favorited);
 
       articlesStore.setArticles(newArticles);
       setLoading(false);
     };
 
     fetchArticles();
-  }, [activeFeed, currentUser]);
+  }, [activeTag, activeFeed, currentUser, username]);
 
   if (loading) {
     return (
