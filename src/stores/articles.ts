@@ -1,6 +1,6 @@
 import { state, setters, getters } from "remx";
 
-import { Article, Author } from "../types";
+import { Article, Profile } from "../types";
 
 type ArticlesState = {
   articles: ReadonlyArray<Article>;
@@ -33,7 +33,7 @@ const articlesSetters = setters({
       articlesState.articles = articles;
     }
   },
-  updateAuthor(author: Author) {
+  updateAuthor(author: Profile) {
     if (author.username === articlesState.openArticle?.author.username) {
       articlesState.openArticle = {
         ...articlesState.openArticle,

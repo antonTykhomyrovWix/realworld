@@ -8,17 +8,21 @@ import {
 } from "react-native";
 import { useConnect } from "remx";
 
-import { Author, User } from "../../types";
+import { User } from "../../types";
 import { profilesService } from "../../services";
-import { articlesStore, userStore } from "../../stores";
+import { articlesStore, profileStore, userStore } from "../../stores";
 
 type FollowAuthorProps = Readonly<{
-  author: Author;
+  username: string;
+  following: boolean;
   goToSignIn: () => void;
 }>;
 
-export function FollowAuthor({ author, goToSignIn }: FollowAuthorProps) {
-  const { following, username } = author;
+export function FollowAuthor({
+  following,
+  username,
+  goToSignIn,
+}: FollowAuthorProps) {
   const [followLoading, setFollowLoading] = useState<boolean>(false);
   // TODO:useConnect type error
   // @ts-ignore
@@ -43,6 +47,7 @@ export function FollowAuthor({ author, goToSignIn }: FollowAuthorProps) {
 
     if (updatedAuthor) {
       articlesStore.updateAuthor(updatedAuthor);
+      profileStore.updateProfile(updatedAuthor);
     }
 
     setFollowLoading(false);

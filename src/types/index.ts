@@ -1,5 +1,5 @@
 export { Article } from "./articles";
-export { Author } from "./author";
+export { Profile } from "./profile";
 export { Comment } from "./comments";
 export { FeedType, Feed } from "./feeds";
 export { Tag } from "./tags";

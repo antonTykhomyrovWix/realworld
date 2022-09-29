@@ -16,7 +16,7 @@ type SignInProps = NativeStackScreenProps<
 export function SignIn({ navigation }: SignInProps) {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [signInDisabled, setSignInDisabled] = useState<boolean>(false);
+  const [signInLoading, setSignInLoading] = useState<boolean>(false);
   const [error, setErrors] = useState<string | undefined>(undefined);
 
   const goToSignUp = useCallback(
@@ -46,9 +46,9 @@ export function SignIn({ navigation }: SignInProps) {
       return;
     }
 
-    setSignInDisabled(true);
+    setSignInLoading(true);
     const data = await userService.login(email, password);
-    setSignInDisabled(false);
+    setSignInLoading(false);
 
     if (typeof data === "string") {
       setErrors(data);
@@ -83,7 +83,7 @@ export function SignIn({ navigation }: SignInProps) {
       />
       <Button
         color="#5CB85C"
-        disabled={signInDisabled}
+        disabled={signInLoading}
         title="Sign In"
         onPress={signIn}
       />

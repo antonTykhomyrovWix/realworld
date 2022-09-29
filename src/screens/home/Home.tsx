@@ -57,6 +57,11 @@ export function Home({ navigation }: HomeProps) {
     [navigation]
   );
 
+  const goToProfile = useCallback(
+    (username: string) => navigation.navigate(screenName.profile, { username }),
+    [navigation]
+  );
+
   return (
     <View style={styles.container}>
       <View style={styles.tagsContainer}>
@@ -68,7 +73,11 @@ export function Home({ navigation }: HomeProps) {
       </View>
 
       <FeedToggle />
-      <ArticlesList goToArticle={goToArticle} goToSignIn={goToSignIn} />
+      <ArticlesList
+        goToArticle={goToArticle}
+        goToSignIn={goToSignIn}
+        goToProfile={goToProfile}
+      />
     </View>
   );
 }

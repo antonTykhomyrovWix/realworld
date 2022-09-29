@@ -17,9 +17,14 @@ import { ArticleItem } from "./ArticleItem";
 type ArticlesListProps = Readonly<{
   goToArticle: (articleSlug: string) => void;
   goToSignIn: () => void;
+  goToProfile: (username: string) => void;
 }>;
 
-export function ArticlesList({ goToArticle, goToSignIn }: ArticlesListProps) {
+export function ArticlesList({
+  goToArticle,
+  goToSignIn,
+  goToProfile,
+}: ArticlesListProps) {
   const [loading, setLoading] = useState<boolean>(true);
   // TODO:useConnect type error
   // @ts-ignore
@@ -73,8 +78,9 @@ export function ArticlesList({ goToArticle, goToSignIn }: ArticlesListProps) {
         renderItem={({ item }) => (
           <ArticleItem
             article={item}
-            goToSignIn={goToSignIn}
             onSelectArticle={() => goToArticle(item.slug)}
+            goToSignIn={goToSignIn}
+            goToProfile={goToProfile}
           />
         )}
         keyExtractor={(item) => item.slug}

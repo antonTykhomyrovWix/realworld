@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 
 import { Article } from "../../types";
@@ -9,24 +9,37 @@ type ArticleHeaderProps = Readonly<{
   article: Article;
   withFollowUser: boolean;
   goToSignIn: () => void;
+  goToProfile: (username: string) => void;
 }>;
 
 export function ArticleMetaInfo({
   article,
   withFollowUser,
   goToSignIn,
+  goToProfile,
 }: ArticleHeaderProps) {
   const { createdAt, author } = article;
   const date = new Date(createdAt);
 
+  const onUsernameClick = useCallback(
+    () => goToProfile(author.username),
+    [author.username, goToProfile]
+  );
+
   return (
     <View>
       <Image style={styles.image} source={{ uri: author.image }} />
-      <Text style={styles.username}>{author.username}</Text>
+      <Text onPress={onUsernameClick} style={styles.username}>
+        {author.username}
+      </Text>
       <Text style={styles.date}>{date.toLocaleDateString()}</Text>
       <View style={styles.rightActions}>
         {withFollowUser && (
-          <FollowAuthor author={author} goToSignIn={goToSignIn} />
+          <FollowAuthor
+            username={author.username}
+            following={author.following}
+            goToSignIn={goToSignIn}
+          />
         )}
         <ArticleFavorite article={article} goToSignIn={goToSignIn} />
       </View>

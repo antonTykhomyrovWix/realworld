@@ -9,12 +9,14 @@ type ArticleItemProps = Readonly<{
   article: Article;
   onSelectArticle: () => void;
   goToSignIn: () => void;
+  goToProfile: (username: string) => void;
 }>;
 
 export function ArticleItem({
   article,
   onSelectArticle,
   goToSignIn,
+  goToProfile,
 }: ArticleItemProps) {
   const { title, description } = article;
 
@@ -22,8 +24,9 @@ export function ArticleItem({
     <View style={styles.container}>
       <ArticleMetaInfo
         article={article}
-        goToSignIn={goToSignIn}
         withFollowUser={false}
+        goToSignIn={goToSignIn}
+        goToProfile={goToProfile}
       />
       <View>
         <Text style={styles.title} onPress={onSelectArticle}>

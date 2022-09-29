@@ -1,4 +1,4 @@
-import { Author } from "./author";
+import { Profile } from "./profile";
 
 export type Article = Readonly<{
   slug: string;
@@ -10,5 +10,5 @@ export type Article = Readonly<{
   updatedAt: Date;
   favorited: boolean;
   favoritesCount: number;
-  author: Author;
+  author: Profile;
 }>;

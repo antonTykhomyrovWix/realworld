@@ -17,7 +17,7 @@ export function SignUp({ navigation }: SignUpProps) {
   const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [signUpDisabled, setSignUpDisabled] = useState<boolean>(false);
+  const [signUpLoading, setSignUpLoading] = useState<boolean>(false);
   const [error, setErrors] = useState<string | undefined>(undefined);
 
   const goToSignIn = useCallback(
@@ -51,9 +51,9 @@ export function SignUp({ navigation }: SignUpProps) {
       return;
     }
 
-    setSignUpDisabled(true);
+    setSignUpLoading(true);
     const data = await userService.register(username, email, password);
-    setSignUpDisabled(false);
+    setSignUpLoading(false);
 
     if (typeof data === "string") {
       setErrors(data);
@@ -94,7 +94,7 @@ export function SignUp({ navigation }: SignUpProps) {
       />
       <Button
         color="#5CB85C"
-        disabled={signUpDisabled}
+        disabled={signUpLoading}
         title="Sign Up"
         onPress={signUp}
       />

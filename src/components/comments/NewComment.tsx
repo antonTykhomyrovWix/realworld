@@ -9,19 +9,19 @@ const USER_IMAGE_URI = "https://api.realworld.io/images/smiley-cyrus.jpeg";
 
 export function NewComment({ postComment }: NewCommentProps) {
   const [text, setText] = useState<string>("");
-  const [disabled, setDisabled] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const onSubmit = useCallback(async () => {
     const comment = text.trim();
     if (comment.length < 1) {
       return;
     }
-    setDisabled(true);
+    setLoading(true);
 
     await postComment(comment);
 
     setText("");
-    setDisabled(false);
+    setLoading(false);
   }, [postComment, text]);
 
   return (
@@ -38,7 +38,7 @@ export function NewComment({ postComment }: NewCommentProps) {
         <Button
           onPress={onSubmit}
           color="#5CB85C"
-          disabled={disabled}
+          disabled={loading}
           title="Post Comment"
         />
       </View>

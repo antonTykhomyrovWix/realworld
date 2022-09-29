@@ -43,6 +43,11 @@ export function Article({ route, navigation }: ArticleProps) {
     [navigation]
   );
 
+  const goToProfile = useCallback(
+    (username: string) => navigation.navigate(screenName.profile, { username }),
+    [navigation]
+  );
+
   useEffect(() => {
     const fetchArticleData = async () => {
       setLoading(true);
@@ -91,8 +96,9 @@ export function Article({ route, navigation }: ArticleProps) {
         <Text style={styles.title}>{article.title}</Text>
         <ArticleMetaInfo
           article={article}
-          goToSignIn={goToSignIn}
           withFollowUser={true}
+          goToSignIn={goToSignIn}
+          goToProfile={goToProfile}
         />
       </View>
       <View style={styles.paddingBlock}>
@@ -103,7 +109,11 @@ export function Article({ route, navigation }: ArticleProps) {
       </View>
 
       <View style={styles.paddingBlock}>
-        <Comments comments={comments} postComment={postComment} />
+        <Comments
+          comments={comments}
+          postComment={postComment}
+          goToProfile={goToProfile}
+        />
       </View>
     </ScrollView>
   );

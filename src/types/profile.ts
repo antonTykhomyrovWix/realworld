@@ -1,4 +1,4 @@
-export type Author = Readonly<{
+export type Profile = Readonly<{
   username: string;
   bio: string;
   image: string;
