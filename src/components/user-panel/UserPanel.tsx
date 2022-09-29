@@ -4,7 +4,7 @@ import { ParamListBase } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack/src/types";
 import { useConnect } from "remx";
 
-import { screenName } from "../../navigation";
+import { ScreenName } from "../../navigation";
 import { User } from "../../types";
 import { userStore } from "../../stores";
 
@@ -20,13 +20,13 @@ export function UserPanel({ navigation }: UserPanelProps) {
   );
 
   const goToSignIn = useCallback(
-    () => navigation.navigate(screenName.signIn),
+    () => navigation.navigate(ScreenName.SignIn),
     [navigation]
   );
 
   const goToProfile = useCallback(() => {
     const username = currentUser!.username;
-    navigation.navigate(screenName.profile, { username });
+    navigation.navigate(ScreenName.Profile, { username });
   }, [currentUser, navigation]);
 
   return (

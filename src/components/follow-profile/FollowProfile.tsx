@@ -6,8 +6,10 @@ import {
   TouchableHighlight,
   View,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { useConnect } from "remx";
 
+import { NavigationPropRootStack, ScreenName } from "../../navigation";
 import { User } from "../../types";
 import { profilesService } from "../../services";
 import { articlesStore, profileStore, userStore } from "../../stores";
@@ -15,14 +17,10 @@ import { articlesStore, profileStore, userStore } from "../../stores";
 type FollowAuthorProps = Readonly<{
   username: string;
   following: boolean;
-  goToSignIn: () => void;
 }>;
 
-export function FollowProfile({
-  following,
-  username,
-  goToSignIn,
-}: FollowAuthorProps) {
+export function FollowProfile({ following, username }: FollowAuthorProps) {
+  const navigation = useNavigation<NavigationPropRootStack>();
   const [followLoading, setFollowLoading] = useState<boolean>(false);
   // TODO:useConnect type error
   // @ts-ignore
@@ -37,7 +35,7 @@ export function FollowProfile({
 
   const onFavoriteClick = useCallback(async () => {
     if (!currentUser) {
-      return goToSignIn();
+      return navigation.navigate(ScreenName.SignIn);
     }
 
     setFollowLoading(true);
@@ -51,7 +49,7 @@ export function FollowProfile({
     }
 
     setFollowLoading(false);
-  }, [following, username, currentUser, goToSignIn]);
+  }, [following, username, currentUser, navigation]);
 
   return (
     <View>

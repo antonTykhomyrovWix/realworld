@@ -1,38 +1,33 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
+import { NavigationPropRootStack, ScreenName } from "../../navigation";
 import { Article } from "../../types";
 import { ArticleMetaInfo } from "../article-meta-info";
 import { ArticleFooter } from "./ArticleFooter";
 
 type ArticleItemProps = Readonly<{
   article: Article;
-  onSelectArticle: () => void;
-  goToSignIn: () => void;
-  goToProfile: (username: string) => void;
 }>;
 
-export function ArticleItem({
-  article,
-  onSelectArticle,
-  goToSignIn,
-  goToProfile,
-}: ArticleItemProps) {
-  const { title, description } = article;
+export function ArticleItem({ article }: ArticleItemProps) {
+  const navigation = useNavigation<NavigationPropRootStack>();
+  const { title, description, slug } = article;
+
+  const goToArticle = useCallback(
+    () => navigation.navigate(ScreenName.Article, { articleSlug: slug }),
+    [navigation, slug]
+  );
 
   return (
     <View style={styles.container}>
-      <ArticleMetaInfo
-        article={article}
-        withFollowUser={false}
-        goToSignIn={goToSignIn}
-        goToProfile={goToProfile}
-      />
+      <ArticleMetaInfo article={article} withFollowUser={false} />
       <View>
-        <Text style={styles.title} onPress={onSelectArticle}>
+        <Text style={styles.title} onPress={goToArticle}>
           {title}
         </Text>
-        <Text style={styles.description} onPress={onSelectArticle}>
+        <Text style={styles.description} onPress={goToArticle}>
           {description}
         </Text>
       </View>

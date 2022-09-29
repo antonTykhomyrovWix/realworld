@@ -10,7 +10,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useConnect } from "remx";
 
 import { commonStyles } from "../../style-sheets";
-import { RootStackParamList, screenName } from "../../navigation";
+import { RootStackParamList, ScreenName } from "../../navigation";
 import { articlesService, commentsService } from "../../services";
 import { Article as ArticleType, Comment, User } from "../../types";
 import { articlesStore, userStore } from "../../stores";
@@ -20,10 +20,10 @@ import { Comments } from "../../components/comments";
 
 type ArticleProps = NativeStackScreenProps<
   RootStackParamList,
-  screenName.article
+  ScreenName.Article
 >;
 
-export function Article({ route, navigation }: ArticleProps) {
+export function Article({ route }: ArticleProps) {
   const [loading, setLoading] = useState<boolean>(true);
   const [comments, setComments] = useState<
     ReadonlyArray<Comment> | undefined
@@ -36,16 +36,6 @@ export function Article({ route, navigation }: ArticleProps) {
   // @ts-ignore
   const currentUser = useConnect<User | undefined, []>(
     userStore.getCurrentUser
-  );
-
-  const goToSignIn = useCallback(
-    () => navigation.navigate(screenName.signIn),
-    [navigation]
-  );
-
-  const goToProfile = useCallback(
-    (username: string) => navigation.navigate(screenName.profile, { username }),
-    [navigation]
   );
 
   useEffect(() => {
@@ -94,12 +84,7 @@ export function Article({ route, navigation }: ArticleProps) {
     <ScrollView>
       <View style={[styles.paddingBlock, styles.headerContainer]}>
         <Text style={styles.title}>{article.title}</Text>
-        <ArticleMetaInfo
-          article={article}
-          withFollowUser={true}
-          goToSignIn={goToSignIn}
-          goToProfile={goToProfile}
-        />
+        <ArticleMetaInfo article={article} withFollowUser={true} />
       </View>
       <View style={styles.paddingBlock}>
         <Text>{article.body}</Text>
@@ -109,13 +94,7 @@ export function Article({ route, navigation }: ArticleProps) {
       </View>
 
       <View style={styles.paddingBlock}>
-        {comments && (
-          <Comments
-            comments={comments}
-            postComment={postComment}
-            goToProfile={goToProfile}
-          />
-        )}
+        {comments && <Comments comments={comments} postComment={postComment} />}
       </View>
     </ScrollView>
   );

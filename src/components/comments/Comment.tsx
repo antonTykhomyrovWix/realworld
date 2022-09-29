@@ -1,19 +1,24 @@
 import React, { useCallback } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
+import { NavigationPropRootStack, ScreenName } from "../../navigation";
 import { Comment as CommentType } from "../../types";
 
 type CommentProps = Readonly<{
   comment: CommentType;
-  goToProfile: (username: string) => void;
 }>;
 
-export function Comment({ comment, goToProfile }: CommentProps) {
+export function Comment({ comment }: CommentProps) {
+  const navigation = useNavigation<NavigationPropRootStack>();
   const date = new Date(comment.createdAt).toLocaleDateString();
 
   const onUsernameClick = useCallback(
-    () => goToProfile(comment.author.username),
-    [comment.author.username, goToProfile]
+    () =>
+      navigation.navigate(ScreenName.Profile, {
+        username: comment.author.username,
+      }),
+    [comment.author.username, navigation]
   );
 
   return (

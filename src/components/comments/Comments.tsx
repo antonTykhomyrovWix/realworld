@@ -10,14 +10,9 @@ import { userStore } from "../../stores";
 type CommentsProps = Readonly<{
   comments: ReadonlyArray<CommentType>;
   postComment: (comment: string) => Promise<void>;
-  goToProfile: (username: string) => void;
 }>;
 
-export function Comments({
-  comments,
-  postComment,
-  goToProfile,
-}: CommentsProps) {
+export function Comments({ comments, postComment }: CommentsProps) {
   // TODO:useConnect type error
   // @ts-ignore
   const currentUser = useConnect<User | undefined, []>(
@@ -28,7 +23,7 @@ export function Comments({
     <View>
       {currentUser && <NewComment postComment={postComment} />}
       {comments.map((comment, index) => (
-        <Comment key={index} comment={comment} goToProfile={goToProfile} />
+        <Comment key={index} comment={comment} />
       ))}
     </View>
   );

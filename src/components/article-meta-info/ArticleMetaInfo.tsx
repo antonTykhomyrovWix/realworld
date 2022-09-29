@@ -1,6 +1,8 @@
 import React, { useCallback } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
+import { NavigationPropRootStack, ScreenName } from "../../navigation";
 import { Article } from "../../types";
 import { ArticleFavorite } from "./ArticleFavorite";
 import { FollowProfile } from "../follow-profile";
@@ -8,22 +10,22 @@ import { FollowProfile } from "../follow-profile";
 type ArticleHeaderProps = Readonly<{
   article: Article;
   withFollowUser: boolean;
-  goToSignIn: () => void;
-  goToProfile: (username: string) => void;
 }>;
 
 export function ArticleMetaInfo({
   article,
   withFollowUser,
-  goToSignIn,
-  goToProfile,
 }: ArticleHeaderProps) {
   const { createdAt, author } = article;
   const date = new Date(createdAt);
+  const navigation = useNavigation<NavigationPropRootStack>();
 
   const onUsernameClick = useCallback(
-    () => goToProfile(author.username),
-    [author.username, goToProfile]
+    () =>
+      navigation.navigate(ScreenName.Profile, {
+        username: author.username,
+      }),
+    [navigation, author.username]
   );
 
   return (
@@ -38,10 +40,9 @@ export function ArticleMetaInfo({
           <FollowProfile
             username={author.username}
             following={author.following}
-            goToSignIn={goToSignIn}
           />
         )}
-        <ArticleFavorite article={article} goToSignIn={goToSignIn} />
+        <ArticleFavorite article={article} />
       </View>
     </View>
   );

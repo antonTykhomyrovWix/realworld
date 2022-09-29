@@ -8,7 +8,7 @@ import {
   View,
 } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList, screenName } from "../../navigation";
+import { RootStackParamList, ScreenName } from "../../navigation";
 import { profilesService } from "../../services";
 import { profileStore, userStore } from "../../stores";
 import { commonStyles } from "../../style-sheets";
@@ -20,7 +20,7 @@ import { ArticlesList } from "../../components/articles-list";
 
 type ProfileProps = NativeStackScreenProps<
   RootStackParamList,
-  screenName.profile
+  ScreenName.Profile
 >;
 
 const PROFILE_FEEDS = [FeedType.Profile, FeedType.Favorite];
@@ -37,22 +37,6 @@ export function Profile({ navigation, route }: ProfileProps) {
   // @ts-ignore
   const profile = useConnect<ProfileType | undefined, []>(
     profileStore.getProfile
-  );
-
-  const goToArticle = useCallback(
-    (articleSlug: string) =>
-      navigation.navigate(screenName.article, { articleSlug }),
-    [navigation]
-  );
-
-  const goToSignIn = useCallback(
-    () => navigation.navigate(screenName.signIn),
-    [navigation]
-  );
-
-  const goToProfile = useCallback(
-    (username: string) => navigation.navigate(screenName.profile, { username }),
-    [navigation]
   );
 
   useEffect(() => {
@@ -77,7 +61,7 @@ export function Profile({ navigation, route }: ProfileProps) {
     await userStore.logout();
     setLogoutLoading(false);
 
-    navigation.navigate(screenName.home);
+    navigation.navigate(ScreenName.Home);
   }, [navigation]);
 
   if (profileLoading || !profile) {
@@ -105,7 +89,6 @@ export function Profile({ navigation, route }: ProfileProps) {
             <FollowProfile
               username={profile.username}
               following={profile.following}
-              goToSignIn={goToSignIn}
             />
           )}
         </View>
@@ -117,13 +100,7 @@ export function Profile({ navigation, route }: ProfileProps) {
           currentUser={currentUser}
           selectFeed={setActiveFeed}
         />
-        <ArticlesList
-          activeFeed={activeFeed}
-          goToArticle={goToArticle}
-          goToSignIn={goToSignIn}
-          goToProfile={goToProfile}
-          username={profile.username}
-        />
+        <ArticlesList activeFeed={activeFeed} username={profile.username} />
       </View>
     </View>
   );
@@ -153,6 +130,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
   articleContainer: {
+    marginTop: 8,
     flexGrow: 1,
     flexShrink: 0,
   },

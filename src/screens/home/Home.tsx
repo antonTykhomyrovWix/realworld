@@ -1,9 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useConnect } from "remx";
 
-import { RootStackParamList, screenName } from "../../navigation";
 import { TagsList } from "../../components/tags-list";
 import { FeedToggle } from "../../components/feed-toggle";
 import { ArticlesList } from "../../components/articles-list";
@@ -11,11 +9,9 @@ import { userStore } from "../../stores";
 import { tagsService } from "../../services";
 import { FeedType, Tag, User } from "../../types";
 
-type HomeProps = NativeStackScreenProps<RootStackParamList, screenName.home>;
-
 const HOME_FEEDS = [FeedType.Your, FeedType.Global, FeedType.Tag];
 
-export function Home({ navigation }: HomeProps) {
+export function Home() {
   // TODO:useConnect type error
   // @ts-ignore
   const currentUser = useConnect<User | undefined, []>(
@@ -65,22 +61,6 @@ export function Home({ navigation }: HomeProps) {
     setActiveFeed(feed);
   }, []);
 
-  const goToArticle = useCallback(
-    (articleSlug: string) =>
-      navigation.navigate(screenName.article, { articleSlug }),
-    [navigation]
-  );
-
-  const goToSignIn = useCallback(
-    () => navigation.navigate(screenName.signIn),
-    [navigation]
-  );
-
-  const goToProfile = useCallback(
-    (username: string) => navigation.navigate(screenName.profile, { username }),
-    [navigation]
-  );
-
   return (
     <View style={styles.container}>
       <View style={styles.tagsContainer}>
@@ -104,13 +84,7 @@ export function Home({ navigation }: HomeProps) {
         currentUser={currentUser}
         selectFeed={selectFeed}
       />
-      <ArticlesList
-        activeFeed={activeFeed}
-        tag={activeTag}
-        goToArticle={goToArticle}
-        goToSignIn={goToSignIn}
-        goToProfile={goToProfile}
-      />
+      <ArticlesList activeFeed={activeFeed} tag={activeTag} />
     </View>
   );
 }

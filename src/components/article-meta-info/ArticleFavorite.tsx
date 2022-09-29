@@ -6,18 +6,20 @@ import {
   TouchableHighlight,
   ActivityIndicator,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { useConnect } from "remx";
 
+import { NavigationPropRootStack, ScreenName } from "../../navigation";
 import { Article, User } from "../../types";
 import { favoriteService } from "../../services";
 import { articlesStore, userStore } from "../../stores";
 
 type ArticleHeaderProps = Readonly<{
   article: Article;
-  goToSignIn: () => void;
 }>;
 
-export function ArticleFavorite({ article, goToSignIn }: ArticleHeaderProps) {
+export function ArticleFavorite({ article }: ArticleHeaderProps) {
+  const navigation = useNavigation<NavigationPropRootStack>();
   const { slug, favoritesCount, favorited } = article;
   const [favoriteLoading, setFavoriteLoading] = useState<boolean>(false);
   // TODO:useConnect type error
@@ -28,7 +30,7 @@ export function ArticleFavorite({ article, goToSignIn }: ArticleHeaderProps) {
 
   const onFavoriteClick = useCallback(async () => {
     if (!currentUser) {
-      return goToSignIn();
+      return navigation.navigate(ScreenName.SignIn);
     }
 
     setFavoriteLoading(true);
@@ -41,7 +43,7 @@ export function ArticleFavorite({ article, goToSignIn }: ArticleHeaderProps) {
     }
 
     setFavoriteLoading(false);
-  }, [slug, favorited, currentUser, goToSignIn]);
+  }, [slug, favorited, currentUser, navigation]);
 
   return (
     <View>

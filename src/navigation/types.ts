@@ -1,23 +1,27 @@
-export const enum screenName {
-  article = "Article",
-  home = "Home",
-  profile = "Profile",
-  signIn = "SignIn",
-  signUp = "SignUp",
+import { NavigationProp } from "@react-navigation/core/src/types";
+
+export const enum ScreenName {
+  Article = "Article",
+  Home = "Home",
+  Profile = "Profile",
+  SignIn = "SignIn",
+  SignUp = "SignUp",
 }
 
 export type RootStackParamList = {
-  [screenName.article]: { articleSlug: string };
-  [screenName.home]: undefined;
-  [screenName.signIn]: undefined;
-  [screenName.profile]: { username: string };
-  [screenName.signUp]: undefined;
+  [ScreenName.Article]: { articleSlug: string };
+  [ScreenName.Home]: undefined;
+  [ScreenName.SignIn]: undefined;
+  [ScreenName.Profile]: { username: string };
+  [ScreenName.SignUp]: undefined;
 };
 
-export const screenTitle: Record<screenName, string> = {
-  [screenName.article]: "Article",
-  [screenName.home]: "Home",
-  [screenName.profile]: "Profile",
-  [screenName.signIn]: "Sign In",
-  [screenName.signUp]: "Sign Up",
+export type NavigationPropRootStack = NavigationProp<RootStackParamList>;
+
+export const screenTitle: Record<ScreenName, string> = {
+  [ScreenName.Article]: "Article",
+  [ScreenName.Home]: "Home",
+  [ScreenName.Profile]: "Profile",
+  [ScreenName.SignIn]: "Sign In",
+  [ScreenName.SignUp]: "Sign Up",
 };

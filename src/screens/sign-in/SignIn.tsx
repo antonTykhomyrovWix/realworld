@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 import { Text, View, Button, TextInput } from "react-native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-import { RootStackParamList, screenName } from "../../navigation";
+import { RootStackParamList, ScreenName } from "../../navigation";
 import { validateEmail } from "../../utils";
 import { userService } from "../../services";
 import { userStore } from "../../stores";
@@ -10,7 +10,7 @@ import { commonStyles } from "../../style-sheets";
 
 type SignInProps = NativeStackScreenProps<
   RootStackParamList,
-  screenName.signIn
+  ScreenName.SignIn
 >;
 
 export function SignIn({ navigation }: SignInProps) {
@@ -20,7 +20,7 @@ export function SignIn({ navigation }: SignInProps) {
   const [error, setErrors] = useState<string | undefined>(undefined);
 
   const goToSignUp = useCallback(
-    () => navigation.navigate(screenName.signUp),
+    () => navigation.navigate(ScreenName.SignUp),
     [navigation]
   );
 
@@ -49,11 +49,6 @@ export function SignIn({ navigation }: SignInProps) {
     setSignInLoading(true);
     const data = await userService.login(email, password);
     setSignInLoading(false);
-
-    if (typeof data === "string") {
-      setErrors(data);
-      return;
-    }
 
     if (!data) {
       setErrors("User is not found");

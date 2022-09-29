@@ -16,21 +16,11 @@ import { ArticleItem } from "./ArticleItem";
 
 type ArticlesListProps = Readonly<{
   activeFeed: FeedType;
-  goToArticle: (articleSlug: string) => void;
-  goToSignIn: () => void;
-  goToProfile: (username: string) => void;
   tag?: Tag | undefined;
   username?: string | undefined;
 }>;
 
-export function ArticlesList({
-  goToArticle,
-  goToSignIn,
-  goToProfile,
-  activeFeed,
-  tag,
-  username,
-}: ArticlesListProps) {
+export function ArticlesList({ activeFeed, tag, username }: ArticlesListProps) {
   const [loading, setLoading] = useState<boolean>(true);
   // TODO:useConnect type error
   // @ts-ignore
@@ -89,14 +79,7 @@ export function ArticlesList({
       <FlatList
         style={styles.container}
         data={articles}
-        renderItem={({ item }) => (
-          <ArticleItem
-            article={item}
-            onSelectArticle={() => goToArticle(item.slug)}
-            goToSignIn={goToSignIn}
-            goToProfile={goToProfile}
-          />
-        )}
+        renderItem={({ item }) => <ArticleItem article={item} />}
         keyExtractor={(item) => item.slug}
       />
     </View>
