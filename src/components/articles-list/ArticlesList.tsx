@@ -44,9 +44,7 @@ export function ArticlesList({ activeFeed, tag, username }: ArticlesListProps) {
               favorited,
             });
 
-      if (newArticles) {
-        articlesStore.setArticles(newArticles);
-      }
+      articlesStore.setArticles(newArticles ?? []);
 
       setLoading(false);
     };

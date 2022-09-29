@@ -1,9 +1,12 @@
-import React, { useCallback } from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import React, { useCallback, useState } from "react";
+import { Image, StyleSheet, Text, View, Button } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { useConnect } from "remx";
 
 import { NavigationPropRootStack, ScreenName } from "../../navigation";
 import { Comment as CommentType } from "../../types";
+import { commentsService } from "../../services";
+import { articlesStore, commentsStore, userStore } from "../../stores";
 
 type CommentProps = Readonly<{
   comment: CommentType;
@@ -11,7 +14,11 @@ type CommentProps = Readonly<{
 
 export function Comment({ comment }: CommentProps) {
   const navigation = useNavigation<NavigationPropRootStack>();
+  const { currentUser } = useConnect(userStore.getCurrentUser);
+  const { article } = useConnect(articlesStore.getOpenArticle);
+  const [removeLoading, setRemoveLoading] = useState<boolean>(false);
   const date = new Date(comment.createdAt).toLocaleDateString();
+  const commentOwner = comment.author.username === currentUser?.username;
 
   const onUsernameClick = useCallback(
     () =>
@@ -20,6 +27,17 @@ export function Comment({ comment }: CommentProps) {
       }),
     [comment.author.username, navigation]
   );
+
+  const onRemoveComment = useCallback(async () => {
+    if (!article) {
+      return;
+    }
+
+    setRemoveLoading(true);
+    await commentsService.removeComment(article.slug, comment.id);
+    commentsStore.removeComment(comment.id);
+    setRemoveLoading(false);
+  }, [article, comment.id]);
 
   return (
     <View style={styles.container}>
@@ -30,6 +48,15 @@ export function Comment({ comment }: CommentProps) {
           {comment.author.username}
         </Text>
         <Text style={styles.date}>{date}</Text>
+        {commentOwner && (
+          <View style={styles.remove}>
+            <Button
+              onPress={onRemoveComment}
+              title={"\uD83D\uDDD1"}
+              disabled={removeLoading}
+            />
+          </View>
+        )}
       </View>
     </View>
   );
@@ -63,5 +90,9 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     borderRadius: 10,
+  },
+  remove: {
+    position: "absolute",
+    right: 16,
   },
 });

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { View } from "react-native";
 
 import { Comment as CommentType } from "../../types";
@@ -14,11 +14,19 @@ type CommentsProps = Readonly<{
 
 export function Comments({ comments, postComment }: CommentsProps) {
   const { currentUser } = useConnect(userStore.getCurrentUser);
+  const orderedComments = useMemo(
+    () =>
+      [...comments].sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      ),
+    [comments]
+  );
 
   return (
     <View>
       {currentUser && <NewComment postComment={postComment} />}
-      {comments.map((comment, index) => (
+      {orderedComments.map((comment, index) => (
         <Comment key={index} comment={comment} />
       ))}
     </View>

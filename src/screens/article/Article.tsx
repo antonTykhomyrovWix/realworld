@@ -12,8 +12,7 @@ import { useConnect } from "remx";
 import { commonStyles } from "../../style-sheets";
 import { RootStackParamList, ScreenName } from "../../navigation";
 import { articlesService, commentsService } from "../../services";
-import { Comment } from "../../types";
-import { articlesStore, userStore } from "../../stores";
+import { articlesStore, commentsStore, userStore } from "../../stores";
 import { ArticleMetaInfo } from "../../components/article-meta-info";
 import { TagsList } from "../../components/tags-list";
 import { Comments } from "../../components/comments";
@@ -25,9 +24,7 @@ type ArticleProps = NativeStackScreenProps<
 
 export function Article({ route }: ArticleProps) {
   const [loading, setLoading] = useState<boolean>(true);
-  const [comments, setComments] = useState<
-    ReadonlyArray<Comment> | undefined
-  >();
+  const comments = useConnect(commentsStore.getComments);
   const { article } = useConnect(articlesStore.getOpenArticle);
   const { currentUser } = useConnect(userStore.getCurrentUser);
 
@@ -42,7 +39,7 @@ export function Article({ route }: ArticleProps) {
       ]);
 
       articlesStore.setOpenArticle(fetchedArticle);
-      setComments(fetchedComments);
+      commentsStore.setComments(fetchedComments ?? []);
       setLoading(false);
     };
 
@@ -60,9 +57,9 @@ export function Article({ route }: ArticleProps) {
         return;
       }
 
-      setComments([newComment, ...(comments ?? [])]);
+      commentsStore.addComment(newComment);
     },
-    [route.params.articleSlug, comments]
+    [route.params.articleSlug]
   );
 
   if (loading || !article) {
