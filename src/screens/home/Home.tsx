@@ -7,16 +7,12 @@ import { FeedToggle } from "../../components/feed-toggle";
 import { ArticlesList } from "../../components/articles-list";
 import { userStore } from "../../stores";
 import { tagsService } from "../../services";
-import { FeedType, Tag, User } from "../../types";
+import { FeedType, Tag } from "../../types";
 
 const HOME_FEEDS = [FeedType.Your, FeedType.Global, FeedType.Tag];
 
 export function Home() {
-  // TODO:useConnect type error
-  // @ts-ignore
-  const currentUser = useConnect<User | undefined, []>(
-    userStore.getCurrentUser
-  );
+  const { currentUser } = useConnect(userStore.getCurrentUser);
   const [tags, setTags] = useState<ReadonlyArray<Tag> | undefined>(undefined);
   const [isTagsLoading, setIsTagsLoading] = useState<boolean>(false);
   const [activeTag, setActiveTag] = useState<Tag | undefined>(undefined);

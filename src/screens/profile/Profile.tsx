@@ -12,7 +12,7 @@ import { RootStackParamList, ScreenName } from "../../navigation";
 import { profilesService } from "../../services";
 import { profileStore, userStore } from "../../stores";
 import { commonStyles } from "../../style-sheets";
-import { FeedType, Profile as ProfileType } from "../../types";
+import { FeedType } from "../../types";
 import { useConnect } from "remx";
 import { FollowProfile } from "../../components/follow-profile";
 import { FeedToggle } from "../../components/feed-toggle";
@@ -29,15 +29,8 @@ export function Profile({ navigation, route }: ProfileProps) {
   const [profileLoading, setProfileLoading] = useState<boolean>(false);
   const [logoutLoading, setLogoutLoading] = useState<boolean>(false);
   const [activeFeed, setActiveFeed] = useState<FeedType>(FeedType.Profile);
-  // TODO:useConnect type error
-  // @ts-ignore
-  const currentUser = useConnect<User | undefined, []>(
-    userStore.getCurrentUser
-  );
-  // @ts-ignore
-  const profile = useConnect<ProfileType | undefined, []>(
-    profileStore.getProfile
-  );
+  const { currentUser } = useConnect(userStore.getCurrentUser);
+  const { profile } = useConnect(profileStore.getProfile);
 
   useEffect(() => {
     const fetchProfile = async () => {

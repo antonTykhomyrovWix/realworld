@@ -11,7 +11,7 @@ import { useConnect } from "remx";
 import { articlesStore, userStore } from "../../stores";
 import { articlesService } from "../../services";
 import { commonStyles } from "../../style-sheets";
-import { FeedType, Tag, User } from "../../types";
+import { FeedType, Tag } from "../../types";
 import { ArticleItem } from "./ArticleItem";
 
 type ArticlesListProps = Readonly<{
@@ -22,11 +22,7 @@ type ArticlesListProps = Readonly<{
 
 export function ArticlesList({ activeFeed, tag, username }: ArticlesListProps) {
   const [loading, setLoading] = useState<boolean>(true);
-  // TODO:useConnect type error
-  // @ts-ignore
-  const currentUser = useConnect<User | undefined, []>(
-    userStore.getCurrentUser
-  );
+  const { currentUser } = useConnect(userStore.getCurrentUser);
   const articles = useConnect(articlesStore.getArticles);
 
   useEffect(() => {

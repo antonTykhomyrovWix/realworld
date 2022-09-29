@@ -35,8 +35,9 @@ const userGetters = getters({
     return userState.loading;
   },
 
-  getCurrentUser() {
-    return userState.currentUser;
+  getCurrentUser(): { currentUser?: User } {
+    const { currentUser } = userState;
+    return { currentUser };
   },
 });
 

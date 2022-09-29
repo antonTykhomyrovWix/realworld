@@ -64,8 +64,10 @@ const articlesGetters = getters({
   getArticles() {
     return articlesState.articles;
   },
-  getOpenArticle() {
-    return articlesState.openArticle;
+  getOpenArticle(): { article?: Article } {
+    return {
+      article: articlesState.openArticle,
+    };
   },
 });
 

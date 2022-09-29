@@ -1,7 +1,7 @@
 import React from "react";
 import { View } from "react-native";
 
-import { Comment as CommentType, User } from "../../types";
+import { Comment as CommentType } from "../../types";
 import { Comment } from "./Comment";
 import { NewComment } from "./NewComment";
 import { useConnect } from "remx";
@@ -13,11 +13,7 @@ type CommentsProps = Readonly<{
 }>;
 
 export function Comments({ comments, postComment }: CommentsProps) {
-  // TODO:useConnect type error
-  // @ts-ignore
-  const currentUser = useConnect<User | undefined, []>(
-    userStore.getCurrentUser
-  );
+  const { currentUser } = useConnect(userStore.getCurrentUser);
 
   return (
     <View>

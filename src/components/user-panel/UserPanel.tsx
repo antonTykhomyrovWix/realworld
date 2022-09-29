@@ -5,7 +5,6 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack/src/ty
 import { useConnect } from "remx";
 
 import { ScreenName } from "../../navigation";
-import { User } from "../../types";
 import { userStore } from "../../stores";
 
 type UserPanelProps = Readonly<{
@@ -13,11 +12,7 @@ type UserPanelProps = Readonly<{
 }>;
 
 export function UserPanel({ navigation }: UserPanelProps) {
-  // TODO:useConnect type error
-  // @ts-ignore
-  const currentUser = useConnect<User | undefined, []>(
-    userStore.getCurrentUser
-  );
+  const { currentUser } = useConnect(userStore.getCurrentUser);
 
   const goToSignIn = useCallback(
     () => navigation.navigate(ScreenName.SignIn),

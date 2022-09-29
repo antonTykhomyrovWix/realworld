@@ -35,8 +35,9 @@ const profileGetters = getters({
     return profileState.loading;
   },
 
-  getProfile() {
-    return profileState.profile;
+  getProfile(): { profile?: Profile } {
+    const { profile } = profileState;
+    return { profile };
   },
 });
 

@@ -62,7 +62,7 @@ export abstract class RestAPI {
   }
 
   private get headers(): Headers {
-    const currentUser = userStore.getCurrentUser();
+    const { currentUser } = userStore.getCurrentUser();
     const headers = new Headers({
       "content-type": "application/json",
       "cache-control": "no-cache",

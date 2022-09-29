@@ -12,7 +12,7 @@ import { useConnect } from "remx";
 import { commonStyles } from "../../style-sheets";
 import { RootStackParamList, ScreenName } from "../../navigation";
 import { articlesService, commentsService } from "../../services";
-import { Article as ArticleType, Comment, User } from "../../types";
+import { Comment } from "../../types";
 import { articlesStore, userStore } from "../../stores";
 import { ArticleMetaInfo } from "../../components/article-meta-info";
 import { TagsList } from "../../components/tags-list";
@@ -28,15 +28,8 @@ export function Article({ route }: ArticleProps) {
   const [comments, setComments] = useState<
     ReadonlyArray<Comment> | undefined
   >();
-  // TODO:useConnect type error
-  // @ts-ignore
-  const article = useConnect<ArticleType | undefined, []>(
-    articlesStore.getOpenArticle
-  );
-  // @ts-ignore
-  const currentUser = useConnect<User | undefined, []>(
-    userStore.getCurrentUser
-  );
+  const { article } = useConnect(articlesStore.getOpenArticle);
+  const { currentUser } = useConnect(userStore.getCurrentUser);
 
   useEffect(() => {
     const fetchArticleData = async () => {

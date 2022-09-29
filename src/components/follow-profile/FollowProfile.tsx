@@ -10,7 +10,6 @@ import { useNavigation } from "@react-navigation/native";
 import { useConnect } from "remx";
 
 import { NavigationPropRootStack, ScreenName } from "../../navigation";
-import { User } from "../../types";
 import { profilesService } from "../../services";
 import { articlesStore, profileStore, userStore } from "../../stores";
 
@@ -22,11 +21,7 @@ type FollowAuthorProps = Readonly<{
 export function FollowProfile({ following, username }: FollowAuthorProps) {
   const navigation = useNavigation<NavigationPropRootStack>();
   const [followLoading, setFollowLoading] = useState<boolean>(false);
-  // TODO:useConnect type error
-  // @ts-ignore
-  const currentUser = useConnect<User | undefined, []>(
-    userStore.getCurrentUser
-  );
+  const { currentUser } = useConnect(userStore.getCurrentUser);
   const text = useMemo(
     () =>
       following ? `\u002B Unfollow ${username}` : `\u002B Follow ${username}`,

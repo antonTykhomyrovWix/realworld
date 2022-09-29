@@ -10,7 +10,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useConnect } from "remx";
 
 import { NavigationPropRootStack, ScreenName } from "../../navigation";
-import { Article, User } from "../../types";
+import { Article } from "../../types";
 import { favoriteService } from "../../services";
 import { articlesStore, userStore } from "../../stores";
 
@@ -22,11 +22,7 @@ export function ArticleFavorite({ article }: ArticleHeaderProps) {
   const navigation = useNavigation<NavigationPropRootStack>();
   const { slug, favoritesCount, favorited } = article;
   const [favoriteLoading, setFavoriteLoading] = useState<boolean>(false);
-  // TODO:useConnect type error
-  // @ts-ignore
-  const currentUser = useConnect<User | undefined, []>(
-    userStore.getCurrentUser
-  );
+  const { currentUser } = useConnect(userStore.getCurrentUser);
 
   const onFavoriteClick = useCallback(async () => {
     if (!currentUser) {
