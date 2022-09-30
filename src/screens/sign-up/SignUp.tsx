@@ -4,7 +4,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { RootStackParamList, ScreenName } from "../../navigation";
 import { commonStyles } from "../../style-sheets";
-import { validateEmail } from "../../utils";
+import { inputsMaxLength, InputsType, validateEmail } from "../../utils";
 import { userService } from "../../services";
 import { userStore } from "../../stores";
 
@@ -72,6 +72,7 @@ export function SignUp({ navigation }: SignUpProps) {
         placeholder="Username"
         onChangeText={setUsername}
         value={username}
+        maxLength={inputsMaxLength[InputsType.Username]}
       />
       <TextInput
         style={commonStyles.input}
@@ -79,6 +80,7 @@ export function SignUp({ navigation }: SignUpProps) {
         onChangeText={setEmail}
         value={email}
         keyboardType="email-address"
+        maxLength={inputsMaxLength[InputsType.Email]}
       />
       <TextInput
         style={commonStyles.input}
@@ -86,6 +88,7 @@ export function SignUp({ navigation }: SignUpProps) {
         onChangeText={setPassword}
         value={password}
         secureTextEntry={true}
+        maxLength={inputsMaxLength[InputsType.Password]}
       />
       <Button
         color="#5CB85C"

@@ -3,7 +3,7 @@ import { Text, View, Button, TextInput } from "react-native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { RootStackParamList, ScreenName } from "../../navigation";
-import { validateEmail } from "../../utils";
+import { inputsMaxLength, InputsType, validateEmail } from "../../utils";
 import { userService } from "../../services";
 import { userStore } from "../../stores";
 import { commonStyles } from "../../style-sheets";
@@ -68,6 +68,7 @@ export function SignIn({ navigation }: SignInProps) {
         onChangeText={setEmail}
         value={email}
         keyboardType="email-address"
+        maxLength={inputsMaxLength[InputsType.Email]}
       />
       <TextInput
         style={commonStyles.input}
@@ -75,6 +76,7 @@ export function SignIn({ navigation }: SignInProps) {
         onChangeText={setPassword}
         value={password}
         secureTextEntry={true}
+        maxLength={inputsMaxLength[InputsType.Password]}
       />
       <Button
         color="#5CB85C"

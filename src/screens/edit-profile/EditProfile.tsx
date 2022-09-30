@@ -7,7 +7,7 @@ import { RootStackParamList, ScreenName } from "../../navigation";
 import { userService } from "../../services";
 import { profileStore, userStore } from "../../stores";
 import { commonStyles } from "../../style-sheets";
-import { validateUrl } from "../../utils";
+import { validateUrl, inputsMaxLength, InputsType } from "../../utils";
 
 type ProfileProps = NativeStackScreenProps<
   RootStackParamList,
@@ -98,14 +98,14 @@ export function EditProfile({ navigation }: ProfileProps) {
         placeholder="URL of profile picture"
         onChangeText={setImage}
         value={image}
-        maxLength={100}
+        maxLength={inputsMaxLength[InputsType.Image]}
       />
       <TextInput
         style={commonStyles.input}
         placeholder="Username?"
         onChangeText={setUsername}
         value={username}
-        maxLength={10}
+        maxLength={inputsMaxLength[InputsType.Username]}
       />
       <TextInput
         style={[commonStyles.input, styles.bioInput]}
@@ -113,14 +113,15 @@ export function EditProfile({ navigation }: ProfileProps) {
         placeholder="Short bio about you"
         onChangeText={setBio}
         value={bio}
-        maxLength={100}
+        maxLength={inputsMaxLength[InputsType.Bio]}
       />
       <TextInput
         style={commonStyles.input}
         placeholder="Email"
         onChangeText={setEmail}
         value={email}
-        maxLength={40}
+        keyboardType="email-address"
+        maxLength={inputsMaxLength[InputsType.Email]}
       />
       <TextInput
         style={commonStyles.input}
@@ -128,7 +129,7 @@ export function EditProfile({ navigation }: ProfileProps) {
         onChangeText={setPassword}
         value={password}
         secureTextEntry={true}
-        maxLength={20}
+        maxLength={inputsMaxLength[InputsType.Password]}
       />
       <Button
         color="#5CB85C"

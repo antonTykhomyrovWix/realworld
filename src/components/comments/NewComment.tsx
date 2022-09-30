@@ -1,6 +1,8 @@
 import React, { useCallback, useState } from "react";
 import { Image, StyleSheet, TextInput, View, Button } from "react-native";
 
+import { inputsMaxLength, InputsType } from "../../utils";
+
 type NewCommentProps = Readonly<{
   postComment: (comment: string) => Promise<void>;
 }>;
@@ -32,6 +34,7 @@ export function NewComment({ postComment }: NewCommentProps) {
         onChangeText={setText}
         value={text}
         multiline={true}
+        maxLength={inputsMaxLength[InputsType.Comment]}
       />
       <View style={styles.bottom}>
         <Image style={styles.image} source={{ uri: USER_IMAGE_URI }} />

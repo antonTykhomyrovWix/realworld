@@ -17,6 +17,7 @@ import {
   ScreenName,
 } from "../../navigation";
 import { articlesService } from "../../services";
+import { inputsMaxLength, InputsType } from "../../utils";
 
 type ArticleProps = NativeStackScreenProps<
   RootStackParamList,
@@ -133,12 +134,14 @@ export function ArticleForm({ route }: ArticleProps) {
         placeholder="Article Title"
         onChangeText={setTitle}
         value={title}
+        maxLength={inputsMaxLength[InputsType.ArticleTitle]}
       />
       <TextInput
         style={commonStyles.input}
         placeholder="What's this article about?"
         onChangeText={setDescription}
         value={description}
+        maxLength={inputsMaxLength[InputsType.ArticleDescription]}
       />
       <TextInput
         style={[commonStyles.input, styles.bodyInput]}
@@ -146,6 +149,7 @@ export function ArticleForm({ route }: ArticleProps) {
         placeholder="Write your article (in markdown)"
         onChangeText={setBody}
         value={body}
+        maxLength={inputsMaxLength[InputsType.ArticleBody]}
       />
       {isNewArticle && (
         <TextInput
@@ -153,6 +157,7 @@ export function ArticleForm({ route }: ArticleProps) {
           placeholder="Enter tags"
           onChangeText={setTags}
           value={tags}
+          maxLength={inputsMaxLength[InputsType.ArticleTags]}
         />
       )}
       <Button
