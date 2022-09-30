@@ -65,6 +65,19 @@ class ArticlesService extends RestAPI {
 
     return response.article;
   }
+
+  async deleteArticle(slug: string): Promise<boolean> {
+    const response = await this.delete<undefined>(
+      `${ARTICLES_API_PATH}/${slug}`
+    );
+
+    if (response instanceof Error) {
+      this.showErrorAlert(response, `Can't delete article`);
+      return false;
+    }
+
+    return true;
+  }
 }
 
 export const articlesService = new ArticlesService();

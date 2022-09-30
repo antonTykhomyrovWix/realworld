@@ -47,17 +47,17 @@ class CommentsService extends RestAPI {
     return response.comment;
   }
 
-  async removeComment(slug: string, id: number): Promise<undefined> {
+  async removeComment(slug: string, id: number): Promise<boolean> {
     const response = await this.delete<undefined>(
       `${COMMENT_API_PATH}/${slug}/comments/${id}`
     );
 
     if (response instanceof Error) {
       this.showErrorAlert(response, `Can't post comment`);
-      return undefined;
+      return false;
     }
 
-    return undefined;
+    return true;
   }
 }
 

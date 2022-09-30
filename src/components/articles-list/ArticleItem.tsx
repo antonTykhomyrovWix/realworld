@@ -22,7 +22,7 @@ export function ArticleItem({ article }: ArticleItemProps) {
 
   return (
     <View style={styles.container}>
-      <ArticleMetaInfo article={article} withFollowUser={false} />
+      <ArticleMetaInfo article={article} showActions={false} />
       <View>
         <Text style={styles.title} onPress={goToArticle}>
           {title}

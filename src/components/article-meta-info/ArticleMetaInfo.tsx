@@ -4,18 +4,15 @@ import { useNavigation } from "@react-navigation/native";
 
 import { NavigationPropRootStack, ScreenName } from "../../navigation";
 import { Article } from "../../types";
+import { ArticleActions } from "../article-actions";
 import { ArticleFavorite } from "./ArticleFavorite";
-import { FollowProfile } from "../follow-profile";
 
 type ArticleHeaderProps = Readonly<{
   article: Article;
-  withFollowUser: boolean;
+  showActions: boolean;
 }>;
 
-export function ArticleMetaInfo({
-  article,
-  withFollowUser,
-}: ArticleHeaderProps) {
+export function ArticleMetaInfo({ article, showActions }: ArticleHeaderProps) {
   const { createdAt, author } = article;
   const date = new Date(createdAt);
   const navigation = useNavigation<NavigationPropRootStack>();
@@ -36,12 +33,7 @@ export function ArticleMetaInfo({
       </Text>
       <Text style={styles.date}>{date.toLocaleDateString()}</Text>
       <View style={styles.rightActions}>
-        {withFollowUser && (
-          <FollowProfile
-            username={author.username}
-            following={author.following}
-          />
-        )}
+        {showActions && <ArticleActions article={article} />}
         <ArticleFavorite article={article} />
       </View>
     </View>

@@ -34,8 +34,14 @@ export function Comment({ comment }: CommentProps) {
     }
 
     setRemoveLoading(true);
-    await commentsService.removeComment(article.slug, comment.id);
-    commentsStore.removeComment(comment.id);
+    const removed = await commentsService.removeComment(
+      article.slug,
+      comment.id
+    );
+    if (removed) {
+      commentsStore.removeComment(comment.id);
+    }
+
     setRemoveLoading(false);
   }, [article, comment.id]);
 

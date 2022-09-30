@@ -74,7 +74,7 @@ export function Article({ route }: ArticleProps) {
     <ScrollView>
       <View style={[styles.paddingBlock, styles.headerContainer]}>
         <Text style={styles.title}>{article.title}</Text>
-        <ArticleMetaInfo article={article} withFollowUser={true} />
+        <ArticleMetaInfo article={article} showActions={true} />
       </View>
       <View style={styles.paddingBlock}>
         <Text>{article.body}</Text>

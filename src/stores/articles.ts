@@ -50,6 +50,20 @@ const articlesSetters = setters({
     }
   },
 
+  deleteArticle(slug: string) {
+    if (slug === articlesState.openArticle?.slug) {
+      articlesState.openArticle = undefined;
+    }
+
+    articlesState.homeArticles = [...articlesState.homeArticles].filter(
+      (article: Article) => article.slug !== slug
+    );
+
+    articlesState.profileArticles = [...articlesState.profileArticles].filter(
+      (article: Article) => article.slug !== slug
+    );
+  },
+
   setOpenArticle(article: Article | undefined) {
     articlesState.openArticle = article;
   },

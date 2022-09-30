@@ -47,6 +47,8 @@ export abstract class RestAPI {
       if (response.status === 401) {
         await userStore.logout();
         return new Error("User session is ended. Please Sign In again");
+      } else if (response.status === 204) {
+        return undefined as T;
       }
 
       const json = await response.json();
