@@ -5,8 +5,9 @@ export const API_URL = "https://api.realworld.io/api";
 
 const enum SupportedMethods {
   Get = "GET",
-  POST = "POST",
-  DELETE = "DELETE",
+  Post = "POST",
+  Put = "PUT",
+  Delete = "DELETE",
 }
 const ERROR_OK_BUTTON = { text: "OK" };
 
@@ -18,11 +19,15 @@ export abstract class RestAPI {
   }
 
   protected async post<T>(url: string, data?: object): Promise<T | Error> {
-    return await this.request(SupportedMethods.POST, url, data);
+    return await this.request(SupportedMethods.Post, url, data);
+  }
+
+  protected async put<T>(url: string, data?: object): Promise<T | Error> {
+    return await this.request(SupportedMethods.Put, url, data);
   }
 
   protected async delete<T>(url: string): Promise<T | Error> {
-    return await this.request(SupportedMethods.DELETE, url);
+    return await this.request(SupportedMethods.Delete, url);
   }
 
   protected showErrorAlert(error: Error, message: string): void {

@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-import { NavigationPropRootStack } from "../../navigation";
+import { NavigationPropRootStack, ScreenName } from "../../navigation";
 import { Article } from "../../types";
 
 type ArticleActionsEditProps = Readonly<{
@@ -12,9 +12,13 @@ type ArticleActionsEditProps = Readonly<{
 export function ArticleActionsEdit({ article }: ArticleActionsEditProps) {
   const navigation = useNavigation<NavigationPropRootStack>();
 
-  const onEditClick = useCallback(() => {
-    console.log("Open Edit", navigation, article);
-  }, [navigation, article]);
+  const onEditClick = useCallback(
+    () =>
+      navigation.navigate(ScreenName.ArticleForm, {
+        articleSlug: article.slug,
+      }),
+    [navigation, article]
+  );
 
   return (
     <View>

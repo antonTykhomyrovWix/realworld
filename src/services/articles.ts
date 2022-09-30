@@ -15,6 +15,13 @@ type ArticleResponse = Readonly<{
   article?: Article;
 }>;
 
+type ArticleForm = Readonly<{
+  title: string;
+  description: string;
+  body: string;
+  tagList?: ReadonlyArray<string>;
+}>;
+
 const ARTICLES_API_PATH = "/articles";
 
 class ArticlesService extends RestAPI {
@@ -60,6 +67,38 @@ class ArticlesService extends RestAPI {
 
     if (response instanceof Error) {
       this.showErrorAlert(response, `Can't fetch article`);
+      return undefined;
+    }
+
+    return response.article;
+  }
+
+  async createArticle(article: ArticleForm): Promise<Article | undefined> {
+    const response = await this.post<ArticleResponse>(`${ARTICLES_API_PATH}`, {
+      article,
+    });
+
+    if (response instanceof Error) {
+      this.showErrorAlert(response, `Can't create article`);
+      return undefined;
+    }
+
+    return response.article;
+  }
+
+  async updateArticle(
+    slug: string,
+    article: ArticleForm
+  ): Promise<Article | undefined> {
+    const response = await this.put<ArticleResponse>(
+      `${ARTICLES_API_PATH}/${slug}`,
+      {
+        article,
+      }
+    );
+
+    if (response instanceof Error) {
+      this.showErrorAlert(response, `Can't update article`);
       return undefined;
     }
 

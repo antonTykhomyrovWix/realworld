@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import { Home } from "../screens/home";
 import { Article } from "../screens/article";
+import { ArticleForm } from "../screens/article-form";
 import { SignIn } from "../screens/sign-in";
 import { SignUp } from "../screens/sign-up";
 import { Profile } from "../screens/profile";
@@ -31,6 +32,13 @@ export function Navigation() {
           component={Article}
           options={{
             title: screenTitle[ScreenName.Article],
+          }}
+        />
+        <Stack.Screen
+          name={ScreenName.ArticleForm}
+          component={ArticleForm}
+          options={{
+            title: screenTitle[ScreenName.ArticleForm],
           }}
         />
         <Stack.Screen
