@@ -18,6 +18,7 @@ import { FollowProfile } from "../../components/follow-profile";
 import { FeedToggle } from "../../components/feed-toggle";
 import { ArticlesList } from "../../components/articles-list";
 import { ArticleListMode } from "../../components/articles-list/ArticlesList";
+import { NewArticleButton } from "../../components/new-article-button";
 
 type ProfileProps = NativeStackScreenProps<
   RootStackParamList,
@@ -100,6 +101,9 @@ export function Profile({ navigation, route }: ProfileProps) {
           username={profile.username}
         />
       </View>
+      <View style={styles.newArticleButton}>
+        <NewArticleButton />
+      </View>
     </View>
   );
 }
@@ -131,5 +135,10 @@ const styles = StyleSheet.create({
     marginTop: 8,
     flexGrow: 1,
     flexShrink: 0,
+  },
+  newArticleButton: {
+    position: "absolute",
+    right: 16,
+    bottom: 32,
   },
 });

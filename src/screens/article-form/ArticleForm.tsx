@@ -8,7 +8,7 @@ import {
   View,
 } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, StackActions } from "@react-navigation/native";
 
 import { commonStyles } from "../../style-sheets";
 import {
@@ -26,7 +26,7 @@ type ArticleProps = NativeStackScreenProps<
 export function ArticleForm({ route }: ArticleProps) {
   const isNewArticle = route.params.articleSlug === undefined;
   const navigation = useNavigation<NavigationPropRootStack>();
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [saving, setSaving] = useState<boolean>(false);
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
@@ -103,7 +103,11 @@ export function ArticleForm({ route }: ArticleProps) {
       : await articlesService.updateArticle(route.params.articleSlug, form);
 
     if (article) {
-      navigation.navigate(ScreenName.Article, { articleSlug: article.slug });
+      navigation.dispatch(
+        StackActions.replace(ScreenName.Article, {
+          articleSlug: article.slug,
+        })
+      );
     }
   }, [
     navigation,

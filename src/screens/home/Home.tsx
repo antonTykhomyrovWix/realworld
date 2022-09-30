@@ -9,6 +9,7 @@ import { userStore } from "../../stores";
 import { tagsService } from "../../services";
 import { FeedType, Tag } from "../../types";
 import { ArticleListMode } from "../../components/articles-list/ArticlesList";
+import { NewArticleButton } from "../../components/new-article-button";
 
 const HOME_FEEDS = [FeedType.Your, FeedType.Global, FeedType.Tag];
 
@@ -86,6 +87,9 @@ export function Home() {
         activeFeed={activeFeed}
         tag={activeTag}
       />
+      <View style={styles.newArticleButton}>
+        <NewArticleButton />
+      </View>
     </View>
   );
 }
@@ -98,5 +102,10 @@ const styles = StyleSheet.create({
   tagsContainer: {
     height: 34,
     justifyContent: "center",
+  },
+  newArticleButton: {
+    position: "absolute",
+    right: 16,
+    bottom: 32,
   },
 });
