@@ -11,6 +11,14 @@ const USERS_API_PATH = "/users";
 const USER_API_PATH = "/user";
 const STORAGE_KEY_CURRENT_USER = "@realworld_test_app.current_user";
 
+type UpdateUserForm = Readonly<{
+  email: string;
+  username: string;
+  image: string;
+  password?: string;
+  bio?: string;
+}>;
+
 class UserService extends RestAPI {
   protected alertErrorTitle = "User Service Error";
 
@@ -26,6 +34,21 @@ class UserService extends RestAPI {
     if (response instanceof Error) {
       // user is not logged. It's ok to return undefined(no current user)
       return undefined;
+    }
+
+    return response.user;
+  }
+
+  async updateCurrent(user: UpdateUserForm): Promise<User | undefined> {
+    const response = await this.put<UserResponse>(USER_API_PATH, { user });
+
+    if (response instanceof Error) {
+      // user is not logged. It's ok to return undefined(no current user)
+      return undefined;
+    }
+
+    if (response.user) {
+      await this.setCurrentUserToStorage(response.user);
     }
 
     return response.user;

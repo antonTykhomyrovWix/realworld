@@ -8,6 +8,7 @@ import { ArticleForm } from "../screens/article-form";
 import { SignIn } from "../screens/sign-in";
 import { SignUp } from "../screens/sign-up";
 import { Profile } from "../screens/profile";
+import { EditProfile } from "../screens/edit-profile";
 import { screenOptions } from "./screen-options";
 import { ScreenName, screenTitle, RootStackParamList } from "./types";
 
@@ -58,6 +59,13 @@ export function Navigation() {
         <Stack.Screen
           name={ScreenName.Profile}
           component={Profile}
+          options={{
+            title: screenTitle[ScreenName.Profile],
+          }}
+        />
+        <Stack.Screen
+          name={ScreenName.EditProfile}
+          component={EditProfile}
           options={{
             title: screenTitle[ScreenName.Profile],
           }}

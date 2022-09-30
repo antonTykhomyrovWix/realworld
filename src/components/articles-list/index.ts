@@ -1,1 +1,1 @@
-export { ArticlesList } from "./ArticlesList";
+export { ArticlesList, ArticleListMode } from "./ArticlesList";

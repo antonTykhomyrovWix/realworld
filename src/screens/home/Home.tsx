@@ -4,11 +4,10 @@ import { useConnect } from "remx";
 
 import { TagsList } from "../../components/tags-list";
 import { FeedToggle } from "../../components/feed-toggle";
-import { ArticlesList } from "../../components/articles-list";
+import { ArticlesList, ArticleListMode } from "../../components/articles-list";
 import { userStore } from "../../stores";
 import { tagsService } from "../../services";
 import { FeedType, Tag } from "../../types";
-import { ArticleListMode } from "../../components/articles-list/ArticlesList";
 import { NewArticleButton } from "../../components/new-article-button";
 
 const HOME_FEEDS = [FeedType.Your, FeedType.Global, FeedType.Tag];

@@ -5,6 +5,7 @@ export const enum ScreenName {
   ArticleForm = "ArticleForm",
   Home = "Home",
   Profile = "Profile",
+  EditProfile = "EditProfile",
   SignIn = "SignIn",
   SignUp = "SignUp",
 }
@@ -15,6 +16,7 @@ export type RootStackParamList = {
   [ScreenName.Home]: undefined;
   [ScreenName.SignIn]: undefined;
   [ScreenName.Profile]: { username: string };
+  [ScreenName.EditProfile]: undefined;
   [ScreenName.SignUp]: undefined;
 };
 
@@ -25,6 +27,7 @@ export const screenTitle: Record<ScreenName, string> = {
   [ScreenName.ArticleForm]: "Article Form",
   [ScreenName.Home]: "Home",
   [ScreenName.Profile]: "Profile",
+  [ScreenName.EditProfile]: "Edit Profile",
   [ScreenName.SignIn]: "Sign In",
   [ScreenName.SignUp]: "Sign Up",
 };
