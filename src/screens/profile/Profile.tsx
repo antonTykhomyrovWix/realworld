@@ -17,6 +17,7 @@ import { useConnect } from "remx";
 import { FollowProfile } from "../../components/follow-profile";
 import { FeedToggle } from "../../components/feed-toggle";
 import { ArticlesList } from "../../components/articles-list";
+import { ArticleListMode } from "../../components/articles-list/ArticlesList";
 
 type ProfileProps = NativeStackScreenProps<
   RootStackParamList,
@@ -93,7 +94,11 @@ export function Profile({ navigation, route }: ProfileProps) {
           currentUser={currentUser}
           selectFeed={setActiveFeed}
         />
-        <ArticlesList activeFeed={activeFeed} username={profile.username} />
+        <ArticlesList
+          mode={ArticleListMode.Profile}
+          activeFeed={activeFeed}
+          username={profile.username}
+        />
       </View>
     </View>
   );

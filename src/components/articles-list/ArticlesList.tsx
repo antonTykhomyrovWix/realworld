@@ -11,18 +11,30 @@ import { useConnect } from "remx";
 import { articlesStore } from "../../stores";
 import { articlesService } from "../../services";
 import { commonStyles } from "../../style-sheets";
-import { FeedType, Tag } from "../../types";
+import { Article, FeedType, Tag } from "../../types";
+import { assertUnreachable } from "../../utils";
 import { ArticleItem } from "./ArticleItem";
 
+export const enum ArticleListMode {
+  Home,
+  Profile,
+}
+
 type ArticlesListProps = Readonly<{
+  mode: ArticleListMode;
   activeFeed: FeedType;
   tag?: Tag | undefined;
   username?: string | undefined;
 }>;
 
-export function ArticlesList({ activeFeed, tag, username }: ArticlesListProps) {
+export function ArticlesList({
+  mode,
+  activeFeed,
+  tag,
+  username,
+}: ArticlesListProps) {
   const [loading, setLoading] = useState<boolean>(true);
-  const articles = useConnect(articlesStore.getArticles);
+  const articles = useConnect(getArticlesByMode(mode));
 
   useEffect(() => {
     const fetchArticles = async () => {
@@ -43,13 +55,13 @@ export function ArticlesList({ activeFeed, tag, username }: ArticlesListProps) {
               favorited,
             });
 
-      articlesStore.setArticles(newArticles ?? []);
+      setArticlesByMode(mode, newArticles);
 
       setLoading(false);
     };
 
     fetchArticles();
-  }, [tag, activeFeed, username]);
+  }, [mode, tag, activeFeed, username]);
 
   if (loading) {
     return (
@@ -85,3 +97,30 @@ const styles = StyleSheet.create({
     width: "100%",
   },
 });
+
+function getArticlesByMode(
+  mode: ArticleListMode
+): () => ReadonlyArray<Article> {
+  switch (mode) {
+    case ArticleListMode.Home:
+      return articlesStore.getHomeArticles;
+    case ArticleListMode.Profile:
+      return articlesStore.getProfileArticles;
+    default:
+      assertUnreachable(mode);
+  }
+}
+
+function setArticlesByMode(
+  mode: ArticleListMode,
+  articles: ReadonlyArray<Article> = []
+): void {
+  switch (mode) {
+    case ArticleListMode.Home:
+      return articlesStore.setHomeArticles(articles);
+    case ArticleListMode.Profile:
+      return articlesStore.setProfileArticles(articles);
+    default:
+      assertUnreachable(mode);
+  }
+}

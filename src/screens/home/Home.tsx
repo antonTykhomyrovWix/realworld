@@ -8,6 +8,7 @@ import { ArticlesList } from "../../components/articles-list";
 import { userStore } from "../../stores";
 import { tagsService } from "../../services";
 import { FeedType, Tag } from "../../types";
+import { ArticleListMode } from "../../components/articles-list/ArticlesList";
 
 const HOME_FEEDS = [FeedType.Your, FeedType.Global, FeedType.Tag];
 
@@ -80,7 +81,11 @@ export function Home() {
         currentUser={currentUser}
         selectFeed={selectFeed}
       />
-      <ArticlesList activeFeed={activeFeed} tag={activeTag} />
+      <ArticlesList
+        mode={ArticleListMode.Home}
+        activeFeed={activeFeed}
+        tag={activeTag}
+      />
     </View>
   );
 }
